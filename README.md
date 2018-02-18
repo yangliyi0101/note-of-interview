@@ -1,6 +1,6 @@
 # 介绍
-转载自作者入境繁华，原github地址https://github.com/zhengjianglong915/note-of-interview
-在其基础上加入了我平时的积累总结，也算是对我自己学习的一个记录，如果能帮到别人那就更好了
+原作者入境繁华，原github地址https://github.com/zhengjianglong915/note-of-interview  
+在其基础上加入了我平时的积累总结，也算是对我自己学习的一个记录，如果能帮到别人那就更好了。
 
 
 ## 内容提纲
@@ -14,7 +14,7 @@
   * [3.1 排序算法汇总](./algorithm/section01.md)
   * [3.2 查找](./algorithm/section02.md)
   * [3.3 字符串](./algorithm/string.md)
-  * [3.4 图算法](./algorithm/tu.md)
+  * [3.4 红黑树](./algorithm/红黑树.md)
 * [第四章 Java](./java/README.md)
   * [4.1 基础](./java/base.md)
   * [4.2 面向对象](./java/object.md)
