@@ -23,7 +23,7 @@ synchronized**内置锁**是一种**对象锁**(锁的是对象而非引用)，�
 1、若该资源是静态的，即被static关键字修饰，那么访问它的方法必须是同步且是静态的，synchronized块必须是class锁 类锁；  
 2、若该资源是非静态的，即没有被 static 关键字修饰，那么访问它的方法必须是同步的，synchronized 块是实例对象锁；  
 关键字synchronized 主要包含两个特征：  
-互斥性：保证在同一时刻，只有一个线程可以执行某一个方法或某一个代码块。（即保证了原子性）
+互斥性：保证在同一时刻，只有一个线程可以执行某一个方法或某一个代码块。（即保证了原子性）  
 可见性：保证线程工作内存中的变量与公共内存中的变量同步，使多线程读取共享变量时可以获得最新值的使用。
 
 ## Lock和Synchronized的选择
@@ -53,18 +53,19 @@ Wait-notify机制是在获取对象锁的前提下不同线程间的通信机制
 wait/notify机制是依赖于Java中Synchronized同步机制的，其目的在于确保等待线程从Wait()返回时能够感知通知线程对共享变量所作出的修改。如果不在同步范围内使用，就会抛出java.lang.IllegalMonitorStateException的异常。wait()表示让当前线程释放对象锁并进入阻塞状态，所以要先确保在同步范围内才能获得对象锁。notify()表示唤醒一个等待相应对象锁的线程，并在当前线程释放后释放对象锁。
 
 ## Java原子性操作实现原理
-使用循环CAS实现原子性操作，CAS是在操作期间先比较旧值，如果旧值没有发生改变，才交换成新值，发生了变化则不交换。这种方式会产生以下几种问题：1.ABA问题，通过加版本号解决；2.循环时间过长开销大，一般采用自旋方式实现；3. 只能保证一个共享变量的原子操作。 
+使用循环CAS实现原子性操作，CAS是在操作期间先比较旧值，如果旧值没有发生改变，才交换成新值，发生了变化则不交换。这种方式会产生以下几种问题：1.ABA问题，通过加版本号解决；2.循环时间过长开销大，一般采用自旋方式实现；3. 只能保证一个共享变量的原子操作。   
 什么是自旋转？  
 试想下，如果两个线程资源竞争不是特别激烈，而处理器阻塞一个线程引起的线程上下文的切换的代价高于等待资源的代价的时候（锁的已保持者保持锁时间比较短），那么线程B可以不放弃CPU时间片，而是在“原地”忙等，直到锁的持有者释放了该锁，这就是自旋锁的原理，可见自旋锁是一种非阻塞锁。
 
 ## sleep() 和 wait() 区别
-答：sleep()方法是线程类（Thread）的静态方法，导致此线程暂停执行指定时间，将执行机会给其他线程，但是监控状态依然保持，到时后会自动恢复（线程回到就绪（ready）状态），因为调用 sleep 不会释放对象锁。wait() 是 Object 类的方法，对此对象调用 wait()方法导致本线程放弃对象锁(线程暂停执行)，进入等待此对象的等待锁定池，只有针对此对象发出 notify 方法（或 notifyAll）后本线程才进入对象锁定池准备获得对象锁进入就绪状态。
+答：sleep()方法是线程类（Thread）的静态方法，导致此线程暂停执行指定时间，将执行机会给其他线程，但是监控状态依然保持，到时后会自动恢复（线程回到就绪（ready）状态），因为调用 sleep 不会释放对象锁。  
+wait() 是 Object 类的方法，对此对象调用 wait()方法导致本线程放弃对象锁(线程暂停执行)，进入等待此对象的等待锁定池，只有针对此对象发出 notify 方法（或 notifyAll）后本线程才进入对象锁定池准备获得对象锁进入就绪状态。
 
 ## sleep() 和 yield() 区别
-① sleep() 方法给其他线程运行机会时**不考虑线程的优先级**，因此会给低优先级的线程以运行的机会；yield() 方法**只会给相同优先级或更高优先级**的线程以运行的机会；
-② 线程执行 sleep() 方法后转入**阻塞**（blocked）状态，而执行 yield() 方法后转入**就绪（ready）**状态；
-③ sleep() 方法声明抛出InterruptedException，而 yield() 方法没有声明任何异常；
-④ sleep() 方法比 yield() 方法（跟操作系统相关）具有更好的可移植性。
+① sleep() 方法给其他线程运行机会时**不考虑线程的优先级**，因此会给低优先级的线程以运行的机会；yield() 方法**只会给相同优先级或更高优先级**的线程以运行的机会；  
+② 线程执行 sleep() 方法后转入**阻塞**（blocked）状态，而执行 yield() 方法后转入**就绪（ready）**状态；  
+③ sleep() 方法声明抛出InterruptedException，而 yield() 方法没有声明任何异常；  
+④ sleep() 方法比 yield() 方法（跟操作系统相关）具有更好的可移植性。  
 
 ## 避免死锁的常见方法：
 1)避免一个线程同时获取多个锁
@@ -88,54 +89,105 @@ b 逐个撤消陷于死锁的进程，直到死锁不存在；
 c 从陷于死锁的进程中逐个强迫放弃所占用的资源，直至死锁消失。
 d 从另外一些进程那里强行剥夺足够数量的资源分配给死锁进程，以解除死锁状态
 
-## CountDownLatch(闭锁) 与CyclicBarrier(栅栏)的区别
-CountDownLatch: 允许一个或多个线程等待其他线程完成操作. CyclicBarrier：阻塞一组线程直到某个事件发生。 
-1. 闭锁用于等待事件、栅栏是等待线程.
-2. 闭锁CountDownLatch做减计数，而栅栏CyclicBarrier则是加计数。
-3. CountDownLatch是一次性的，CyclicBarrier可以重用。
-4. CountDownLatch一个线程(或者多个)，等待另外N个线程完成某个事情之后才能执行。CyclicBarrier是N个线程相互等待，任何一个线程完成之前，所有的线程都必须等待。 
-CountDownLatch 是计数器, 线程完成一个就记一个,就像报数一样, 只不过是递减的.
-而CyclicBarrier更像一个水闸, 线程执行就像水流, 在水闸处都会堵住, 等到水满(线程到齐)了, 才开始泄流.
+## 阻塞队列
+自从Java 1.5之后，在java.util.concurrent包下提供了若干个阻塞队列，主要有以下几个：  
+**ArrayBlockingQueue**：基于数组实现的一个阻塞队列，在创建ArrayBlockingQueue对象时必须制定容量大小。并且可以指定公平性与非公平性，默认情况下为非公平的，即不保证等待时间最长的队列最优先能够访问队列。  
+**LinkedBlockingQueue**：基于链表实现的一个阻塞队列，在创建LinkedBlockingQueue对象时如果不指定容量大小，则默认大小为Integer.MAX_VALUE。  
+**PriorityBlockingQueue**：以上2种队列都是先进先出队列，而PriorityBlockingQueue却不是，它会按照元素的优先级对元素进行排序，按照优先级顺序出队，每次出队的元素都是优先级最高的元素。注意，此阻塞队列为无界阻塞队列，即容量没有上限（通过源码就可以知道，它没有容器满的信号标志），前面2种都是有界队列。
+**SynchronousQueue**：同步移交，不是一个真正的队列，而是一种在县城之间进行的移交机制。对于非常大的或者无界的线程池，可以通过SynchronousQueue来避免排队，以及直接将任务从生产者移交给工作者线程。  
+内部最关键的两个方法，put（）和take（）。本质上使用了Condition的 await（）和signal（）。
+
+## 线程池（thread pool）
+答：在面向对象编程中，创建和销毁对象是很费时间的，因为创建一个对象要获取内存资源或者其它更多资源。在 Java 中更是如此，虚拟机将试图跟踪每一个对象，以便能够在对象销毁后进行垃圾回收。所以提高服务程序效率的一个手段就是尽可能减少创建和销毁对象的次数，特别是一些很耗资源的对象创建和销毁，这就是"池化资源"技术产生的原因。线程池顾名思义就是事先创建若干个可执行的线程放入一个池（容器）中，需要的时候从池中获取线程不用自行创建，使用完毕不需要销毁线程而是放回池中，从而减少创建和销毁线程对象的开销。另外一个额外的好处是，当请求达到时，工作线程通常已经存在，因此不会由于等待创建线程而延迟任务的执行，从而提高了响应时间。  
+java.uitl.concurrent.**ThreadPoolExecutor**类是线程池中最核心的一个类，因此如果要透彻地了解Java中的线程池，必须先了解这个类。ThreadPoolExecutor继承了AbstractExecutorService类，并提供了四个构造器，事实上，通过观察每个构造器的源码具体实现，发现前面三个构造器都是调用的第四个构造器进行的初始化工作。分析下构造函数的各个参数：  
+1、**corePoolSize**：核心池的大小，这个参数跟后面讲述的线程池的实现原理有非常大的关系。在创建了线程池后，默认情况下，线程池中并没有任何线程，而是等待有任务到来才创建线程去执行任务，除非调用了prestartAllCoreThreads()或者prestartCoreThread()方法，从这2个方法的名字就可以看出，是预创建线程的意思，即在没有任务到来之前就创建corePoolSize个线程或者一个线程。默认情况下，**在创建了线程池后，线程池中的线程数为0**，当有任务来之后，就会创建一个线程去执行任务，当线程池中的线程数目达到corePoolSize后，就会把到达的任务放到缓存队列当中；  
+2、**maximumPoolSize**：线程池最大线程数，这个参数也是一个非常重要的参数，它表示在线程池中最多能创建多少个线程；  
+3、**keepAliveTime**：表示线程没有任务执行时最多保持多久时间会终止。默认情况下，只有当线程池中的线程数大于corePoolSize时，keepAliveTime才会起作用，直到线程池中的线程数不大于corePoolSize，即当线程池中的线程数大于corePoolSize时，如果一个线程空闲的时间达到keepAliveTime，则会终止，直到线程池中的线程数不超过corePoolSize。但是如果调用了allowCoreThreadTimeOut(boolean)方法，在线程池中的线程数不大于corePoolSize时，keepAliveTime参数也会起作用，直到线程池中的线程数为0；  
+4、**unit**：参数keepAliveTime的时间单位，有7种取值，在TimeUnit类中有7种静态属性：
+5、workQueue：一个阻塞队列，用来存储等待执行的任务，这个参数的选择也很重要，会对线程池的运行过程产生重大影响，一般来说，这里的阻塞队列有以下几种选择：ArrayBlockingQueue、LinkedBlockingQueue、SynchronousQueue。  
+6、threadFactory：线程工厂，主要用来创建线程；  
+7、handler：表示当拒绝处理任务时的策略。  
+在前面我们多次提到了**任务缓存队列**，即workQueue，它用来存放等待执行的任务。  
+workQueue的类型为BlockingQueue<Runnable>，通常可以取下面三种类型：  
+1）ArrayBlockingQueue：基于数组的先进先出队列，此队列创建时必须指定大小；  
+2）LinkedBlockingQueue：基于链表的先进先出队列，如果创建时没有指定此队列大小，则默认为Integer.MAX_VALUE；   
+3）synchronousQueue：这个队列比较特殊，它不会保存提交的任务，而是将直接新建一个线程来执行新来的任务。  
+**饱和策略：**  
+当线程池的任务缓存队列已满并且线程池中的线程数目达到maximumPoolSize，如果还有任务到来就会采取任务拒绝策略，通常有以下四种策略：  
+ThreadPoolExecutor.AbortPolicy:**中止策略**。丢弃任务并抛出RejectedExecutionException异常。默认的饱和策略
+ThreadPoolExecutor.DiscardPolicy：**抛弃策略**。悄悄抛弃该任务，但是不抛出异常。
+ThreadPoolExecutor.DiscardOldestPolicy：**抛弃最旧策略**：抛弃下一个将被执行的任务，然后尝试重新提交新的任务。丢弃队列最前面的任务，然后重新尝试执行任务（重复此过程）
+ThreadPoolExecutor.CallerRunsPolicy：**调用者运行策略**：由调用线程处理该任务。将某些任务回退到调用者，将任务在调用execute时在主线程中执行。
+**注意点**：
+如果当前线程池中的线程数目小于corePoolSize，则每来一个任务，就会创建一个线程去执行这个任务；  
+如果当前线程池中的线程数目>=corePoolSize，则每来一个任务，会尝试将其添加到任务缓存队列当中，若添加成功，则该任务会等待空闲线程将其取出去执行；若添加失败（一般来说是任务缓存队列已满），则会尝试创建新的线程去执行这个任务；   
+如果当前线程池中的线程数目达到maximumPoolSize，则会采取任务拒绝策略进行处理；  
+如果线程池中的线程数量大于 corePoolSize时，如果某线程空闲时间超过keepAliveTime，线程将被终止，直至线程池中的线程数目不大于corePoolSize；如果允许为核心池中的线程设置存活时间，那么核心池中的线程空闲时间超过keepAliveTime，线程也会被终止。  
+**设置线程池的大小**：  
+如果是CPU密集型任务，就需要尽量压榨CPU，参考值可以设为 NCPU+1；  
+如果是IO密集型任务，参考值可以设置为2*NCPU
 
 ## execute 和submit的区别
-Execute()用于提交不需要返回值得任务，submit()用于提交需要返回值的任务，发挥Future类型的对象。
+Execute()用于提交不需要返回值得任务，submit()用于提交需要返回值的任务，返回Future类型的对象。
 
 ## Shutdown和shutdownNow的区别
 它们的原理都是遍历线程池中的工作线程，然后逐个调用线程的Internet方法来中断线程，所以无法响应中断的任务可能永远无法终止。
 ShutdownNow首先将线程池的状态设置成STOP,然后尝试停止所有正在执行或暂停的任务，并返回等待执行任务的列表。而shutdown只是将线程池设置成SHUTDOWN状态，然后中断没有正在执行任务的线程。
 
+## CountDownLatch(闭锁) 与CyclicBarrier(栅栏)的区别
+在java 1.5中，提供了一些非常有用的辅助类来帮助我们进行并发编程，比如CountDownLatch，CyclicBarrier和Semaphore  
+**CountDownLatch**：比如有一个任务A，它要等待其他4个任务执行完毕之后才能执行，此时就可以利用CountDownLatch来实现这种功能了。public void await() throws InterruptedException { };   //调用await()方法的线程会被挂起，它会等待直到count值为0才继续执行。 
+**CyclicBarrier**：字面意思回环栅栏，通过它可以实现让一组线程等待至某个状态之后再全部同时执行。叫做回环是因为当所有等待线程都被释放以后，CyclicBarrier可以被重用。我们暂且把这个状态就叫做barrier，当调用await()方法之后，线程就处于barrier了。   
+**CountDownLatch**: 允许一个或多个线程等待其他线程完成操作. **CyclicBarrier**：阻塞一组线程直到某个事件发生。     
+1. 闭锁用于等待事件、栅栏是等待线程.  
+2. 闭锁CountDownLatch做减计数，而栅栏CyclicBarrier则是加计数。  
+3. CountDownLatch是一次性的，CyclicBarrier可以重用。  
+4. CountDownLatch一个线程(或者多个)，等待另外N个线程完成某个事情之后才能执行。CyclicBarrier是N个线程相互等待，任何一个线程完成之前，所有的线程都必须等待。   
+CountDownLatch 是计数器, 线程完成一个就记一个,就像报数一样, 只不过是递减的.  
+而CyclicBarrier更像一个水闸, 线程执行就像水流, 在水闸处都会堵住, 等到水满(线程到齐)了, 才开始泄流.   
+**Semaphore**翻译成字面意思为 信号量，Semaphore可以控同时访问的线程个数，通过 acquire() 获取一个许可，如果没有就等待，而 release() 释放一个许可。
+
+## Timer和TimerTask
+其实就Timer来讲就是一个调度器,而TimerTask呢只是一个实现了run方法的一个类,而具体的TimerTask需要由你自己来实现,例如这样:  
+
+	Timer timer = new Timer();  
+	timer.schedule(new TimerTask() {  
+	        public void run() {  
+	            System.out.println("abc");  
+	        }  
+	}, 200000 , 1000);
+这里直接实现一个TimerTask(当然，你可以实现多个TimerTask，多个TimerTask可以被一个Timer会被分配到多个Timer中被调度，后面会说到Timer的实现机制就是说内部的调度机制)，然后编写run方法，20s后开始执行，每秒执行一次，当然你通过一个timer对象来操作多个timerTask
 
 
 
-## 什么是线程池（thread pool）
-答：在面向对象编程中，创建和销毁对象是很费时间的，因为创建一个对象要获取内存资源或者其它更多资源。在 Java 中更是如此，虚拟机将试图跟踪每一个对象，以便能够在对象销毁后进行垃圾回收。所以提高服务程序效率的一个手段就是尽可能减少创建和销毁对象的次数，特别是一些很耗资源的对象创建和销毁，这就是"池化资源"技术产生的原因。线程池顾名思义就是事先创建若干个可执行的线程放入一个池（容器）中，需要的时候从池中获取线程不用自行创建，使用完毕不需要销毁线程而是放回池中，从而减少创建和销毁线程对象的开销。
 
-http://www.cnblogs.com/dolphin0520/p/3932921.html
+
 ## ConcurrentHashMap实现原理
-ConcurrentHashMap和Hashtable主要区别就是围绕着锁的粒度以及如何锁。
-Hashtabl在竞争激烈的环境下表现效率低下的原因是一把锁锁住整张表，导致所有线程同时竞争一个锁。ConcurrentHashMap采用分段锁，每把锁锁住容器中的一个Segment。那么多线程访问容器里不同的Segment的数据时线程就不会存在竞争，从而有效提高并发访问效率。首先是将数据分层多个Segment存储，并为每个Segment分配一把锁，当一个线程范围其中一段数据时，其他线程可以访问其他段的数据。
+ConcurrentHashMap和Hashtable主要区别就是围绕着锁的粒度以及如何锁。  
+Hashtabl在竞争激烈的环境下表现效率低下的原因是一把锁锁住整张表，导致所有线程同时竞争一个锁。ConcurrentHashMap采用分段锁，每把锁锁住容器中的一个Segment。那么多线程访问容器里不同的Segment的数据时线程就不会存在竞争，从而有效提高并发访问效率。首先是将数据分层多个Segment存储，并为每个Segment分配一把锁，当一个线程范围其中一段数据时，其他线程可以访问其他段的数据。  
+在理想状态下，ConcurrentHashMap 可以支持 16 个线程执行并发写操作（如果并发级别设为16），及任意数量线程的读操作。  
+数据结构：  
+ConcurrentHashMap本质上是一个Segment数组，而一个Segment实例又包含若干个桶，每个桶中都包含一条由若干个 HashEntry 对象链接起来的链表。Segment 类继承于 ReentrantLock 类，从而使得 Segment 对象能充当锁的角色。ConcurrentHashMap不同于HashMap，它既不允许key值为null，也不允许value值为null。  
+Segment的定位：根据key的hash值的高n位就可以确定元素到底在哪一个Segment中。（并发级别为16的话 n就是4）。  
+总的来说，ConcurrentHashMap读操作不需要加锁的奥秘在于以下三点：  
+1、用HashEntery对象的不变性来降低读操作对加锁的需求。  
+2、用Volatile变量协调读写线程间的内存可见性；  
+3、若读时发生指令重排序现象，则加锁重读；  
 
-数据结构：
-ConcurrentHashMap内部是有Segment数组和HashEntry数组组成。一个ConcurrentHashMapMap里包含一个Segment数组，而Segment的结构和HashMap一样，里面是由一个数组和链表结构组成，所以一个Segment内部包含一个HashEntry数组。每个HashEntry是一个链表结构，对于HashEntry数组进行修改时首先需要获取与它对应的Segment锁。默认情况下有16个Segment
+ConcurrentHashMap的**弱一致性**主要是为了提升效率，也是一致性与效率之间的一种**权衡**。要成为强一致性，就得到处使用锁，甚至是全局锁，这就与Hashtable和同步的HashMap一样了。ConcurrentHashMap的弱一致性主要体现在以下几方面：  
+get操作是弱一致的：get操作只能保证一定能看到已完成的put操作；  
+clear操作是弱一致的：在清除完一个segments之后，正在清理下一个segments的时候，已经清理的segments可能又被加入了数据，因此clear返回的时候，ConcurrentHashMap中是可能存在数据的。  
+ConcurrentHashMap中的迭代操作是弱一致的(未遍历的内容发生变化可能会反映出来)：在遍历过程中，如果已经遍历的数组上的内容变化了，迭代器不会抛出ConcurrentModificationException异常。如果未遍历的数组上的内容发生了变化，则有可能反映到迭代过程中
 
-Segment的定位:
-使用Wang/Jenkins hash变种算法对元素的hashCode进行一次再散列，目的是为了减少散列冲突。
+http://blog.csdn.net/justloveyou_/article/details/72783008
 
-ConcurrentHashMap的操作:
-1.) get
-get操作实现非常简单高效。先经过一次在散列，然后用这个散列值通过散列运算定位到Segment，再通过散列算法定位到元素。get之所以高效是因为整个get过程不需要加锁，除非读到空值才会加锁重读。实现该技术的技术保证是保证HashEntry是不可变的。
-第一步是访问count变量，这是一个volatile变量，由于所有的修改操作在进行结构修改时都会在最后一步写count 变量，通过这种机制保证get操作能够得到几乎最新的结构更新。对于非结构更新，也就是结点值的改变，由于HashEntry的value变量是 volatile的，也能保证读取到最新的值。接下来就是根据hash和key对hash链进行遍历找到要获取的结点，如果没有找到，直接访回null。
-对hash链进行遍历不需要加锁的原因在于链指针next是final的。但是头指针却不是final的，这是通过getFirst(hash)方法返回，也就是存在 table数组中的值。这使得getFirst(hash)可能返回过时的头结点，例如，当执行get方法时，刚执行完getFirst(hash)之后，另一个线程执行了删除操作并更新头结点，这就导致get方法中返回的头结点不是最新的。这是可以允许，通过对count变量的协调机制，get能读取到几乎最新的数据，虽然可能不是最新的。要得到最新的数据，只有采用完全的同步。
-2.) put
-该方法也是在持有段锁(锁定当前segment)的情况下执行的，这当然是为了并发的安全，修改数据是不能并发进行的，必须得有个判断是否超限的语句以确保容量不足时能够rehash。首先根据计算得到的散列值定位到segment及该segment中的散列桶中。接着判断是否存在同样一个key的结点，如果存在就直接替换这个结点的值。否则创建一个新的结点并添加到hash链的头部，这时一定要修改modCount和count的值，同样修改count的值一定要放在最后一步。
-3）remove
-HashEntry中除了value不是final的，其它值都是final的，这意味着不能从hash链的中间或尾部添加或删除节点，因为这需要修改next 引用值，所有的节点的修改只能从头部开始。对于put操作，可以一律添加到Hash链的头部。但是对于remove操作，可能需要从中间删除一个节点，这就需要将要删除节点的前面所有节点整个复制一遍，最后一个节点指向要删除结点的下一个结点。
-首先定位到要删除的节点e。如果不存在这个节点就直接返回null，否则就要将e前面的结点复制一遍，尾结点指向e的下一个结点。e后面的结点不需要复制，它们可以重用。
-4) size()
-每个Segment都有一个count变量，是一个volatile变量。当调用size方法时，首先先尝试2次通过不锁住segment的方式统计各个Segment的count值得总和，如果两次值不同则将锁住整个ConcurrentHashMap然后进行计算。
-参见《java并发编程的艺术》P156
-http://www.cnblogs.com/ITtangtang/p/3948786.html
+## CopyOnWrite
+CopyOnWrite容器即写时复制的容器。通俗的理解是当我们往一个容器添加元素的时候，不直接往当前容器添加，而是先将当前容器进行Copy，复制出一个新的容器，然后新的容器里添加元素，添加完元素之后，再将原容器的引用指向新的容器。这样做的好处是我们可以对CopyOnWrite容器进行并发的读，而不需要加锁，因为当前容器不会添加任何元素。所以CopyOnWrite容器也是一种读写分离的思想，读和写不同的容器。  
+从JDK1.5开始Java并发包里提供了两个使用CopyOnWrite机制实现的并发容器,它们是CopyOnWriteArrayList和CopyOnWriteArraySet。  
+CopyOnWrite并发容器用于读多写少的并发场景。主要有两个缺点：内存占用问题。数据一致性问题。CopyOnWrite容器只能保证数据的最终一致性，不能保证数据的实时一致性。所以如果你希望写入的的数据，马上能读到，请不要使用CopyOnWrite容器。  
 
+http://www.cnblogs.com/dolphin0520/p/3938914.html
+  
 ## 线程的几种可用状态
 线程在运行周期里有6中不同的状态。
 1. New 新建
@@ -211,15 +263,15 @@ AIO与BIO的区别
 
 ## 写出生产者消费者模式。
 
-    public class ProducerConsumerPattern {
-        public static void main(String args[]){
-         BlockingQueue sharedQueue = new LinkedBlockingQueue();
-         Thread prodThread = new Thread(new Producer(sharedQueue));
-         Thread consThread = new Thread(new Consumer(sharedQueue));
-         prodThread.start();
-         consThread.start();
-        }
-    }
+	public class ProducerConsumerPattern {
+	    public static void main(String args[]){
+	     BlockingQueue sharedQueue = new LinkedBlockingQueue();
+	     Thread prodThread = new Thread(new Producer(sharedQueue));
+	     Thread consThread = new Thread(new Consumer(sharedQueue));
+	     prodThread.start();
+	     consThread.start();
+	    }
+	}
     
     //Producer Class in java
     class Producer implements Runnable {
