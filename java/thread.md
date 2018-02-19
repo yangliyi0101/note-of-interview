@@ -93,8 +93,8 @@ d 从另外一些进程那里强行剥夺足够数量的资源分配给死锁进
 自从Java 1.5之后，在java.util.concurrent包下提供了若干个阻塞队列，主要有以下几个：  
 **ArrayBlockingQueue**：基于数组实现的一个阻塞队列，在创建ArrayBlockingQueue对象时必须制定容量大小。并且可以指定公平性与非公平性，默认情况下为非公平的，即不保证等待时间最长的队列最优先能够访问队列。  
 **LinkedBlockingQueue**：基于链表实现的一个阻塞队列，在创建LinkedBlockingQueue对象时如果不指定容量大小，则默认大小为Integer.MAX_VALUE。  
-**PriorityBlockingQueue**：以上2种队列都是先进先出队列，而PriorityBlockingQueue却不是，它会按照元素的优先级对元素进行排序，按照优先级顺序出队，每次出队的元素都是优先级最高的元素。注意，此阻塞队列为无界阻塞队列，即容量没有上限（通过源码就可以知道，它没有容器满的信号标志），前面2种都是有界队列。
-**SynchronousQueue**：同步移交，不是一个真正的队列，而是一种在县城之间进行的移交机制。对于非常大的或者无界的线程池，可以通过SynchronousQueue来避免排队，以及直接将任务从生产者移交给工作者线程。  
+**PriorityBlockingQueue**：以上2种队列都是先进先出队列，而PriorityBlockingQueue却不是，它会按照元素的优先级对元素进行排序，按照优先级顺序出队，每次出队的元素都是优先级最高的元素。注意，此阻塞队列为无界阻塞队列，即容量没有上限（通过源码就可以知道，它没有容器满的信号标志），前面2种都是有界队列。  
+**SynchronousQueue**：同步移交，不是一个真正的队列，而是一种在线程之间进行的移交机制。对于非常大的或者无界的线程池，可以通过SynchronousQueue来避免排队，以及直接将任务从生产者移交给工作者线程。
 内部最关键的两个方法，put（）和take（）。本质上使用了Condition的 await（）和signal（）。
 
 ## 线程池（thread pool）

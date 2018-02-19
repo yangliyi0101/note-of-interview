@@ -24,6 +24,7 @@
   * [6.1 spring](./framework/spring.md)
   * [6.2 hibernate](./framework/hibernate.md)
   * [6.3 struts](./framework/struts.md)
+  * [6.4 SpringMVC](./framework/SpringMVC.md)
 * [第七章 其他基础](./others/README.md)
   * [7.1 编码历史](./others/section1.md)
   * [7.2 单例模式的几种实现方式](./others/danli.md)
