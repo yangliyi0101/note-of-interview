@@ -234,7 +234,19 @@ StringBuffer Sb = new StringBuilder(“This is only a”).append(“simple”).a
 UnsupportedOperationException是用于表明操作不支持的异常。在JDK类中已被大量运用，在集合框架java.util.Collections.UnmodifiableCollection将会在所有add和remove操作中抛出这个异常。
 
 
-##  Excption与Error包结构
+##  Exception与Error包结构
+在Java中，Throwable是所有异常类型的根类，Throwable有两个直接子类：Exception 和 Error。Error类是error类型异常的父类，Exception类是exception类型异常的父类，RuntimeException类是所有运行时异常的父类，RuntimeException以外的并且继承Exception的类是非运行时异常。  
+常见的RuntimeException包括NullPointerException、IndexOutOfBoundsException。  
+常见的非RuntimeException包括IOException、SQLException等。  
+**Error** **是程序无法处理的错误**，表示运行应用程序中**较严重问题**。这些错误大部分与代码编写者执行的操作无关，而与代码运行时的 JVM 、资源等有关。例如，Java虚拟机运行错误（Virtual MachineError），当 JVM 不再有继续执行操作所需的内存资源时，将出现 OutOfMemoryError。这些异常发生时，Java虚拟机（JVM）一般会选择线程终止。这些错误是不可查的，并且它们在应用程序的控制和处理能力之外。在 Java 中，错误通过Error的子类描述。  
+**Exception** 通常是Java程序员所关心的，其在Java类库、用户方法及运行时故障中都可能抛出。它由两个分支组成： **运行时异常**（派生于 RuntimeException 的异常） 和**非运行时异常** 。划分这两种异常的规则是：由**程序错误**（一般是逻辑错误，如错误的**类型转换**、**数组越界**等，应该避免）导致的异常属于RuntimeException；而程序本身没有问题，但由于诸如**I/O这类错误**（eg：试图打开一个不存在的文件）导致的异常就属于非运行时异常。  
+Java的异常(包括Exception和Error)通常可分为 **受检查的异常**（checked exceptions） 和 **不受检查的异常**（unchecked exceptions） 两种类型。**不受检查异常是编译器不要求强制处理的异常**，包括运行时异常（RuntimeException与其子类）和错误（Error）。受检查异常是编译器要求必须处理的异常。这里所指的处理方式有两种： 捕获并处理异常 和声明抛出异常 。也就是说，当程序中可能出现这类异常，要么用 try-catch 语句捕获它，要么用 throws 子句声明抛出它，否则编译不会通过。  
+
+解读：RuntimeException所表示的是软件开发人员没有正确地编写代码所导致的问题，如数组访问越界等。**如果程序出现RuntimeException异常，那么一定是程序员的问题**。而派生自Exception类的各个异常（非运行时异常）所表示的并不是代码本身的不足所导致的非正常状态，而是一系列应用本身也无法控制的情况。例如一个应用在尝试打开一个文件并写入的时候，该文件已经被另外一个应用打开从而无法写入。对于这些情况，**Java通过Checked Exception来强制软件开发人员在编写代码的时候就考虑对这些无法避免的情况的处理**，从而提高代码质量。而Error则是一系列很难通过程序解决的问题。这些问题基本上是无法恢复的，例如内存空间不足等。在这种情况下，我们基本无法使得程序重新回到正常轨道上。  
+**如何正确使用Checked Exception**。首先，Checked Exception应当只在异常情况对于API以及API的使用者都无法避免的情况下被使用。例如在打开一个文件的时候，API以及API的使用者都没有办法保证该文件一定存在。反过来，在通过索引访问数据的时候，如果API的使用者对参数index传入的是-1，那么这就是一个代码上的错误，是完全可以避免的。因此对于index参数值不对的情况，我们应该使用Unchecked Exception。其次，Checked Exception不应该被广泛调用的API所抛出。这一方面是基于代码整洁性的考虑，另一方面则是因为Checked Exception本身的实际意义是API以及API的使用者都无法避免的情况。如果一个应用有太多处这种“无法避免的异常”，那么这个程序是否拥有足够的质量也是一个很值得考虑的问题。而就API提供者而言，在一个主要的被广泛使用的功能上抛出这种异常，也是对其自身API的一种否定。再次，一个Checked Exception应该有明确的意义。这种明确意义的标准则是需要让API使用者能够看到这个Checked Exception所对应的异常类，该异常类所包含的各个域，并阅读相应的API文档以后就能够了解到底哪里出现了问题，进而向用户提供准确的有关该异常的解释。
+
+
+
 
 
 ## java值传递问题
@@ -251,8 +263,6 @@ http://www.cnblogs.com/dolphin0520/p/3780005.html
 public protected private abstract static final transient volatile synchronized native strictfp
 
 
-个人公众号(欢迎关注)：<br>
-![](/assets/weix_gongzhonghao.jpg)
 
 
 

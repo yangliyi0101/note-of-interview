@@ -1,145 +1,141 @@
 ## 什么是Spring
-Spring是一个开源的Java EE开发框架。Spring框架的核心功能可以应用在任何Java应用程序中，但对Java EE平台上的Web应用程序有更好的扩展性。Spring框架的目标是使得Java EE应用程序的开发更加简捷，通过使用POJO为基础的编程模型促进良好的编程风格。
+Spring是一个开源的Java EE开发框架。Spring框架的核心功能可以应用在任何Java应用程序中，但对Java EE平台上的Web应用程序有更好的扩展性。Spring框架的目标是**使得Java EE应用程序的开发更加简捷**，通过使用POJO为基础的编程模型促进良好的编程风格。  
 
 ## Spring有哪些优点
-**轻量级**：Spring在大小和透明性方面绝对属于轻量级的，基础版本的Spring框架大约只有2MB。
-**控制反转(IOC)**：Spring使用控制反转技术实现了松耦合。依赖被注入到对象，而不是创建或寻找依赖对象。
-**面向切面编程(AOP)**： Spring支持面向切面编程，同时把应用的**业务逻辑与系统的服务分离开来**。
-**容器**：Spring包含并管理应用程序对象的配置及生命周期。
-**MVC框架**：Spring的web框架是一个设计优良的web MVC框架，很好的取代了一些web框架。
-**事务管理**：Spring对下至本地业务上至全局业务(JAT)提供了统一的事务管理接口。
-**异常处理**：Spring提供一个方便的API将特定技术的异常(由JDBC, Hibernate, 或JDO抛出)转化为一致的、Unchecked异常。
+**轻量级**：Spring在大小和透明性方面绝对属于轻量级的，基础版本的Spring框架大约只有2MB。  
+**控制反转(IOC)**：Spring使用控制反转技术实现了松耦合。依赖被注入到对象，而不是创建或寻找依赖对象。  
+**面向切面编程(AOP)**： Spring支持面向切面编程，同时把应用的**业务逻辑与系统的服务分离开来**。  
+**容器**：Spring包含并管理应用程序对象的配置及生命周期。  
+**MVC框架**：Spring的web框架是一个设计优良的web MVC框架，很好的取代了一些web框架。  
+**事务管理**：Spring对下至本地业务上至全局业务(JAT)提供了统一的事务管理接口。  
+**异常处理**：Spring提供一个方便的API将特定技术的异常(由JDBC, Hibernate, 或JDO抛出)转化为一致的、Unchecked异常。  
 
 ## Spring框架有哪些模块
-Spring框架至今已集成了20多个模块。这些模块主要被分如下图所示的核心容器、数据访问/集成、Web、AOP（面向切面编程）、工具、消息和测试模块。
-**核心容器模块**：是spring中最核心的模块。负责Bean的创建，配置和管理。主要包括：beans,core,context,expression等模块。
-**Spring的AOP模块**：主要负责对面向切面编程的支持，帮助应用对象解耦。
-**数据访问和集成模块**：包括JDBC，ORM，OXM，JMS和事务处理模块，其细节如下：
-JDBC模块提供了不再需要冗长的JDBC编码相关了JDBC的抽象层。
-ORM模块提供的集成层。流行的对象关系映射API，包括JPA，JDO，Hibernate和iBatis。
-OXM模块提供了一个支持对象/ XML映射实现对JAXB，Castor，使用XMLBeans，JiBX和XStream 的抽象层。
-Java消息服务JMS模块包含的功能为生产和消费的信息。
-事务模块支持编程和声明式事务管理实现特殊接口类，并为所有的POJO。
-**Web和远程调用**：包括web,servlet,struts,portlet模块。
-**测试模块**：test
-**工具模块**
-**消息模块**
+Spring框架至今已集成了20多个模块。这些模块主要被分如下图所示的核心容器、数据访问/集成、Web、AOP（面向切面编程）、工具、消息和测试模块。  
+**核心容器模块**：是spring中最核心的模块。负责Bean的创建，配置和管理。主要包括：**beans,core,context,expression**等模块。  
+**Spring的AOP模块**：主要负责对面向切面编程的支持，帮助应用对象解耦。  
+**数据访问和集成模块**：包括JDBC，ORM，OXM，JMS和事务处理模块，其细节如下：  
+JDBC模块提供了不再需要冗长的JDBC编码相关了JDBC的抽象层。  
+ORM模块提供的集成层。流行的对象关系映射API，包括JPA，JDO，Hibernate和iBatis。  
+OXM模块提供了一个支持对象/ XML映射实现对JAXB，Castor，使用XMLBeans，JiBX和XStream 的抽象层。   
+Java消息服务JMS模块包含的功能为生产和消费的信息。  
+事务模块支持编程和声明式事务管理实现特殊接口类，并为所有的POJO。  
+**Web和远程调用**：包括web,servlet,struts,portlet模块。  
+**测试模块**：test  
+**工具模块**  
+**消息模块**  
 
 ## 什么是控制反转(IOC)？什么是依赖注入？
-传统模式中对象的调用者需要创建被调用对象，两个对象过于耦合，不利于变化和拓展．在spring中，直接操控的对象的调用权交给容器，通过容器来实现对象组件的装配和管理，从而实现对象之间的松耦合。所谓的“控制反转”概念就是对组件对象控制权的转移，从程序代码本身转移到了外部容器。
-**依赖注入**：对象无需自行创建或管理它们的依赖关系，IoC容器在运行期间，动态地将某种依赖关系注入到对象之中。依赖注入能让相互协作的软件组件保持松散耦合。
+传统模式中对象的调用者需要创建被调用对象，两个对象过于耦合，不利于变化和拓展．在spring中，直接操控的对象的调用权交给容器，通过容器来实现对象组件的装配和管理，从而实现对象之间的松耦合。所谓的“控制反转”概念就是**对组件对象控制权的转移**，从程序代码本身转移到了外部容器。  
+**依赖注入**：对象无需自行创建或管理它们的依赖关系，IoC容器在运行期间，**动态地将某种依赖关系注入到对象之中**。依赖注入能让相互协作的软件组件保持松散耦合。从1.0版本开始，Spring就同时支持setter和构造器方式的依赖注入（本质就是在xml配置文件中进行配置）。从2.5版本开始，通过Autowired注释，Spring支持基于field方式的依赖注入。
 
 ## BeanFactory和ApplicationContext有什么区别？
-Bean工厂(BeanFactory)是Spring框架最核心的接口，提供了高级Ioc的配置机制．应用上下文(ApplicationContext)建立在BeanFacotry基础之上，提供了更多面向应用的功能，如果国际化，属性编辑器，事件等等．beanFactory是spring框架的基础设施，是面向spring本身，ApplicationContext是面向使用Spring框架的开发者，几乎所有场合都会用到ApplicationContext.
+Bean工厂(BeanFactory)是Spring框架最核心的接口，提供了高级Ioc的配置机制．应用上下文(ApplicationContext)建立在BeanFacotry基础之上，提供了更多面向应用的功能，如**国际化**，**强大的事件机制**（观察者模式，当ApplicationContext中发布一个事件的时，所有扩展了ApplicationListener的Bean都将会接受到这个事件，并进行相应的处理。），**底层资源的访问**（ApplicationContext扩展了ResourceLoader(资源加载器)接口）等等．**beanFactory是spring框架的基础设施，是面向spring本身，ApplicationContext是面向使用Spring框架的开发者**，几乎所有场合都会用到ApplicationContext.  
+其他区别：BeanFactroy采用的是延迟加载形式来注入Bean的，即只有在使用到某个Bean时(调用getBean())，才对该Bean进行加载实例化，这样，我们就不能发现一些存在的Spring的配置问题。而ApplicationContext则相反，它是在容器启动时，一次性创建了所有的Bean。这样，在容器启动时，我们就可以发现Spring中存在的配置错误。等等。
 
 ## Spring有几种配置方式？
-将Spring配置到应用开发中有以下三种方式：
-**基于XML的配置**:
-**基于注解的配置**： Spring在2.5版本以后开始支持用注解的方式来配置依赖注入。可以用注解的方式来替代XML方式的bean描述，可以将bean描述转移到组件类的内部，只需要在相关类上、方法上或者字段声明上使用注解即可。注解注入将会被容器在XML注入之前被处理，所以后者会覆盖掉前者对于同一个属性的处理结果
-**基于Java的配置**： Spring对Java配置的支持是由@Configuration注解和@Bean注解来实现的。由@Bean注解的方法将会实例化、配置和初始化一个新对象，这个对象将由Spring的IoC容器来管理。@Bean声明所起到的作用与<bean/> 元素类似。被@Configuration所注解的类则表示这个类的主要目的是作为bean定义的资源。被@Configuration声明的类可以通过在同一个类的内部调用@bean方法来设置嵌入bean的依赖关系。
+将Spring配置到应用开发中有以下三种方式：  
+**基于XML的配置**:  
+**基于注解的配置**： Spring在2.5版本以后开始支持用注解的方式来配置依赖注入。可以用注解的方式来替代XML方式的bean描述，可以将bean描述转移到组件类的内部，只需要在相关类上、方法上或者字段声明上使用注解即可。注解注入将会被容器在XML注入之前被处理，所以后者会覆盖掉前者对于同一个属性的处理结果  
+**基于Java的配置**： Spring对Java配置的支持是由@Configuration注解和@Bean注解来实现的。由@Bean注解的方法将会实例化、配置和初始化一个新对象，这个对象将由Spring的IoC容器来管理。@Bean声明所起到的作用与<bean/> 元素类似。被@Configuration所注解的类则表示这个类的主要目的是作为bean定义的资源。被@Configuration声明的类可以通过在同一个类的内部调用@bean方法来设置嵌入bean的依赖关系。  
 
 ## Spring Bean的生命周期
 
-Bean在Spring中的生命周期如下：
-**实例化**。Spring通过new关键字将一个Bean进行实例化，JavaBean都有默认的构造函数，因此不需要提供构造参数。
-**填入属性**。Spring根据xml文件中的配置通过调用Bean中的setXXX方法填入对应的属性。
-事件通知。Spring依次检查Bean是否实现了BeanNameAware、BeanFactoryAware、ApplicationContextAware、BeanPostProcessor、InitializingBean接口，如果有的话，依次调用这些接口。
-**使用**。应用程序可以正常使用这个Bean了。
-**销毁**。如果Bean实现了DisposableBean接口，就调用其destroy方法。
+Bean在Spring中的生命周期如下：  
+**实例化**。Spring通过new关键字将一个Bean进行实例化，JavaBean都有默认的构造函数，因此不需要提供构造参数。  
+**填充属性**。Spring将值和bean的引用注入到bean对应的属性中。  
+**事件通知**。Spring依次检查Bean是否实现了BeanNameAware、BeanFactoryAware、ApplicationContextAware、BeanPostProcessor、InitializingBean接口，如果有的话，依次调用这些接口。  
+如果bean实现了**BeanNameAware**接口，Spring将bean的ID传递给setBeanName()方法。  
+如果bean实现了**BeanFactoryAware**接口，Spring将调用setBeanFactory()方法，将BeanFactory容器实例传入。  
+如果bean实现了**ApplicationContextAware**接口，Spring将调用setApplicationContext()方法，将bean所在的应用上下文的引用传入进来。  
+如果bean实现了**BeanPostProcessor**接口，Spring将调用它们的postProcessBeforeInitialization（）方法。  
+如果bean实现了**InitializingBean**接口，Spring将调用它们的afterPropertiesSet()方法。类似地，如果bean使用init-method声明了初始化方法，该方法也会被调用。  
+如果bean实现了**BeanPostProcessor**接口，Spring将调用它们的postProcessAfterInitialization()方法。  
+**使用**。应用程序可以正常使用这个Bean了。  
+**销毁**。如果Bean实现了DisposableBean接口，就调用其destroy方法。   
 
-
----加载过程---
-1.容器寻找Bean的定义信息并且将其实例化。
-2.如果允许提前暴露工厂，则提前暴露这个bean的工厂，这个工厂主要是返回该未完全处理的bean．主要是用于避免单例属性循环依赖问题．
-3.受用**依赖注入**，Spring按照Bean定义信息配置Bean的所有属性。
-4.如果Bean实现了**BeanNameAware**接口，工厂调用Bean的**setBeanName()**方法传递Bean的ID。
-5.如果Bean实现了**BeanFactoryAware**接口，工厂调用**setBeanFactory()**方法传入工厂自身。
-6.如果**BeanPostProcessor**和Bean关联，那么它们的**postProcessBeforeInitialzation()**方法将被调用。
-7.如果Bean指定了init-method方法，它将被调用。
-8.如果有**BeanPostProcessor**和Bean关联，那么它们的postProcessAfterInitialization()方法将被调用
-9.最后如果配置了destroy-method方法则注册**DisposableBean**.
-
-到这个时候，Bean已经可以被应用系统使用了，并且将被保留在Bean Factory中知道它不再需要。
-有两种方法可以把它从Bean Factory中删除掉。
-1.如果Bean实现了DisposableBean接口，destory()方法被调用。
-2.如果指定了订制的销毁方法，就调用这个方法。
 
 ## Spring Bean的作用域之间有什么区别
-singleton：这种bean范围是默认的，这种范围确保不管接受到多少个请求，每个容器中只有一个bean的实例，单例的模式由bean factory自身来维护。
-prototype：原形范围与单例范围相反，为每一个bean请求提供一个实例。
-request：在请求bean范围内会每一个来自客户端的网络请求创建一个实例，在请求完成以后，bean会失效并被垃圾回收器回收。
-Session：与请求范围类似，确保每个session中有一个bean的实例，在session过期后，bean会随之失效。
-global-session：global-session和Portlet应用相关。当你的应用部署在Portlet容器中工作时，它包含很多portlet。如果你想要声明让所有的portlet共用全局的存储变量的话，那么这全局变量需要存储在global-session中。
+单例singleton：在整个应用中，只创建bean的一个实例。（默认）  
+原型prototype：每次注入或者通过Spring应用上下文获取的时候，都会创建一个新的bean实例。  
+请求request：在Web应用中，为每个请求创建一个bean实例。  
+会话Session：在Web应用中，为每个会话创建一个bean实例。  
 
-## 请解释自动装配模式的区别
-**no**：这是Spring框架的默认设置，在该设置下自动装配是关闭的，开发者需要自行在bean定义中用标签明确的设置依赖关系。
-**byName****：该选项可以根据bean名称设置依赖关系。当向一个bean中自动装配一个属性时，容器将根据bean的名称自动在在配置文件中查询一个匹配的bean。如果找到的话，就装配这个属性，如果没找到的话就报错。
-**byType**：该选项可以根据bean类型设置依赖关系。当向一个bean中自动装配一个属性时，容器将根据bean的类型自动在在配置文件中查询一个匹配的bean。如果找到的话，就装配这个属性，如果没找到的话就报错。
-**constructor**：造器的自动装配和byType模式类似，但是仅仅适用于与有构造器相同参数的bean，如果在容器中没有找到与构造器参数类型一致的bean，那么将会抛出异常。
-**autodetect**：该模式自动探测**使用构造器自动装配或者byType自动装配**。首先，首先会尝试找合适的带参数的构造器，如果找到的话就是用构造器自动装配，如果在bean内部没有找到相应的构造器或者是无参构造器，容器就会自动选择byTpe的自动装配方式。
+## Java Bean的自动装配
+当描述bean如何进行装配时，Spring具有非常强大的灵活性，它主要提供了三种主要的装配机制：  
+1. 在XML中进行显式配置；  
+2. 在Java中进行显式配置；（JavaConfig）  
+3. 隐式的bean发现机制和自动装配；推荐。  
+Spring从两个角度来实现自动化装配：  
+组件扫描：Spring会自动发现应用上下文所创建的bean。<context:annotation-config />    
+自动装配：Spring自动满足bean之间的依赖。@Autowired    
+**no**：这是Spring框架的默认设置，在该设置下自动装配是关闭的，开发者需要自行在bean定义中用标签明确的设置依赖关系。  
+**byName**：该选项可以根据bean名称设置依赖关系。当向一个bean中自动装配一个属性时，容器将根据bean的名称自动在在配置文件中查询一个匹配的bean。如果找到的话，就装配这个属性，如果没找到的话就报错。  
+**byType**：该选项可以根据bean类型设置依赖关系。当向一个bean中自动装配一个属性时，容器将根据bean的类型自动在在配置文件中查询一个匹配的bean。如果找到的话，就装配这个属性，如果没找到的话就报错。  
+**constructor**：构造器的自动装配和byType模式类似，但是仅仅适用于与有构造器相同参数的bean，如果在容器中没有找到与构造器参数类型一致的bean，那么将会抛出异常。  
+**autodetect**：该模式自动探测**使用构造器自动装配或者byType自动装配**。首先，首先会尝试找合适的带参数的构造器，如果找到的话就是用构造器自动装配，如果在bean内部没有找到相应的构造器或者是无参构造器，容器就会自动选择byTpe的自动装配方式。  
+
+## 什么是AOP
+面向切面编程允许你把遍布应用各处的功能分离出来形成可重用的组件。诸如日志、事物管理和安全这样的系统服务经常融入到自身具有核心业务逻辑的组件中去，这些系统服务通常被称为横切关注点，将这些关注点与核心业务隔离。在OOP面向对象的使用中，无可避免的会出现代码重复，而且使用面向对象的编程方式，这种重复无法避免，比如用户权限判断中，根据相应的权限执行相应的方法；在servlet中设置编码格式时，同样相同的代码出现很多次，而且还根业务无关，很容易忘记写，结果运行的时候就出现乱码拉。这种重复代码不仅使编码麻烦，而且还不容易维护。而AOP则将这些代码整理起来，将解决某个切面问题的代码单独的放在某个模块中，然后再织入到程序中。   
+**方面（Aspect）**：一个关注点的模块化，这个关注点实现可能另外横切多个对象。事务管理是J2EE应用中一个很好的横切关注点例子。方面用Spring的 Advisor或拦截器实现。  
+**连接点（Joinpoint）**: 程序执行过程中明确的点，如方法的调用或特定的异常被抛出。  
+**通知（Advice）:** 在特定的连接点，AOP框架执行的动作。各种类型的通知包括“around”、“before”和“throws”通知。通知类型将在下面讨论。许多AOP框架包括Spring都是以拦截器做通知模型，维护一个“围绕”连接点的拦截器链。Spring中定义了4个advice.Interception Around(MethodInterceptor)、Before(MethodBeforeAdvice)、After Returning(AfterReturningAdvice)、After(AfterAdvice)。  
+**切入点（Pointcut）**: 一系列连接点的集合。AOP框架必须允许开发者指定切入点：例如，使用正则表达式。 Spring定义了Pointcut接口，用来组合MethodMatcher和ClassFilter，可以通过名字很清楚的理解， MethodMatcher是用来检查目标类的方法是否可以被应用此通知，而ClassFilter是用来检查Pointcut是否应该应用到目标类上  
+**引入（Introduction）**: 添加方法或字段到被通知的类。 Spring允许引入新的接口到任何被通知的对象。例如，你可以使用一个引入使任何对象实现 IsModified接口，来简化缓存。Spring中要使用Introduction, 可有通过DelegatingIntroductionInterceptor来实现通知，通过DefaultIntroductionAdvisor来配置Advice和代理类要实现的接口  
+**目标对象（Target Object）**: 包含连接点的对象。也被称作被通知或被代理对象。POJO   
+**AOP代理（AOP Proxy）**: AOP框架创建的对象，包含通知。 在Spring中，AOP代理可以是JDK动态代理或者CGLIB代理。  
+**织入（Weaving）**: 组装方面来创建一个被通知对象。这可以在编译时完成（例如使用AspectJ编译器），也可以在运行时完成。Spring和其他纯Java AOP框架一样，在运行时完成织入。   
+
+
+## AOP是怎么实现的
+实现AOP的技术，主要分为两大类：一是采用**动态代理技术**，利用截取消息的方式，对该消息进行装饰，以取代原有对象行为的执行；二是采用**静态织入**的方式，引入特定的语法创建“方面”，从而使得编译器可以在编译期间织入有关“方面”的代码。Spring AOP 的实现原理其实很简单：AOP 框架负责动态地生成 AOP 代理类，这个代理类的方法则由 Advice 和回调目标对象的方法所组成,并将该对象可作为目标对象使用。AOP 代理包含了目标对象的全部方法，但 AOP 代理中的方法与目标对象的方法存在差异，AOP 方法在特定切入点添加了增强处理，并回调了目标对象的方法。    
+Spring AOP使用动态代理技术在运行期织入增强代码。使用两种代理机制：基于JDK的动态代理（JDK本身只提供接口的代理）；基于CGlib的动态代理。  
+
+1)JDK的动态代理主要涉及java.lang.reflect包中的两个类：Proxy和InvocationHandler。其中InvocationHandler只是一个接口，可以通过实现该接口定义横切逻辑，并通过反射机制调用目标类的代码，动态的将横切逻辑与业务逻辑织在一起。而Proxy利用InvocationHandler动态创建一个符合某一接口的实例，生成目标类的代理对象。
+其代理对象**必须是某个接口的实现**,它是通过在运行期间创建一个接口的实现类来完成对目标对象的代理.只能实现接口的类生成代理,而**不能针对类**  
+
+2)CGLib采用底层的字节码技术，为一个类创建子类，并在子类中采用方法拦截的技术拦截所有父类的调用方法，并顺势织入横切逻辑.它运行期间生成的代理对象是目标类的扩展子类.所以无法通知final的方法,因为它们不能被覆写.是针对类实现代理,主要是为指定的类生成一个子类,覆盖其中方法.  
+
+在spring中默认情况下使用JDK动态代理实现AOP,如果proxy-target-class设置为true或者使用了优化策略那么会使用CGLIB来创建动态代理.Spring　AOP在这两种方式的实现上基本一样．以JDK代理为例，会使用JdkDynamicAopProxy来创建代理，在invoke()方法首先需要织入到当前类的增强器封装到拦截器链中，然后递归的调用这些拦截器完成功能的织入．最终返回代理对象．  
 
 ## Spring 框架中都用到了哪些设计模式
-**代理模式**—在AOP和remoting中被用的比较多。
-**单例模式**—在spring配置文件中定义的bean默认为单例模式。
-**模板方法**—用来解决代码重复的问题
+**代理模式**—在AOP和remoting中被用的比较多。  
+**单例模式**—在spring配置文件中定义的bean默认为单例模式。  
+**模板方法**—用来解决代码重复的问题  
 比如. RestTemplate, JmsTemplate, JpaTemplate。
 前端控制器—Srping提供了DispatcherServlet来对请求进行分发。
 视图帮助(View Helper )—Spring提供了一系列的JSP标签，高效宏来辅助将分散的代码整合在视图里。
 依赖注入—贯穿于BeanFactory / ApplicationContext接口的核心理念。
-**工厂模式**—BeanFactory用来创建对象的实例。
-**Builder模式** - 自定义配置文件的解析bean是时采用builder模式，一步一步地构建一个beanDefinition
+**工厂模式**—BeanFactory用来创建对象的实例。  
+**Builder模式** - 自定义配置文件的解析bean是时采用builder模式，一步一步地构建一个beanDefinition  
 **策略模式** ：Spring 中策略模式使用有多个地方，如 Bean 定义对象的创建以及代理对象的创建等。这里主要看一下代理对象创建的策略模式的实现。
-前面已经了解 Spring 的代理方式有两个 Jdk 动态代理和 CGLIB 代理。这两个代理方式的使用正是使用了策略模式。
+前面已经了解 Spring 的代理方式有两个 Jdk 动态代理和 CGLIB 代理。这两个代理方式的使用正是使用了策略模式。  
 
-## AOP是怎么实现的
-实现AOP的技术，主要分为两大类：一是采用动态代理技术，利用截取消息的方式，对该消息进行装饰，以取代原有对象行为的执行；二是采用静态织入的方式，引入特定的语法创建“方面”，从而使得编译器可以在编译期间织入有关“方面”的代码。Spring AOP 的实现原理其实很简单：AOP 框架负责动态地生成 AOP 代理类，这个代理类的方法则由 Advice 和回调目标对象的方法所组成,并将该对象可作为目标对象使用。AOP 代理包含了目标对象的全部方法，但 AOP 代理中的方法与目标对象的方法存在差异，AOP 方法在特定切入点添加了增强处理，并回调了目标对象的方法。
-Spring AOP使用动态代理技术在运行期织入增强代码。使用两种代理机制：基于JDK的动态代理（JDK本身只提供接口的代理）；基于CGlib的动态代理。
-
-1)JDK的动态代理主要涉及java.lang.reflect包中的两个类：Proxy和InvocationHandler。其中InvocationHandler只是一个接口，可以通过实现该接口定义横切逻辑，并通过反射机制调用目标类的代码，动态的将横切逻辑与业务逻辑织在一起。而Proxy利用InvocationHandler动态创建一个符合某一接口的实例，生成目标类的代理对象。
-其代理对象**必须是某个接口的实现**,它是通过在运行期间创建一个接口的实现类来完成对目标对象的代理.只能实现接口的类生成代理,而**不能针对类**
-
-2)CGLib采用底层的字节码技术，为一个类创建子类，并在子类中采用方法拦截的技术拦截所有父类的调用方法，并顺势织入横切逻辑.它运行期间生成的代理对象是目标类的扩展子类.所以无法通知final的方法,因为它们不能被覆写.是针对类实现代理,主要是为指定的类生成一个子类,覆盖其中方法.
-
-在spring中默认情况下使用JDK动态代理实现AOP,如果proxy-target-class设置为true或者使用了优化策略那么会使用CGLIB来创建动态代理.Spring　AOP在这两种方式的实现上基本一样．以JDK代理为例，会使用JdkDynamicAopProxy来创建代理，在invoke()方法首先需要织入到当前类的增强器封装到拦截器链中，然后递归的调用这些拦截器完成功能的织入．最终返回代理对象．
-
-http://zhengjianglong.cn/2015/12/12/Spring/spring-source-aop/
-
-## 介绍spring的IOC实现
-Spring　IOC主要负责创建和管理bean及bean之间的依赖关系．Spring　IOC的可分为:IOC容器的初始化和bean的加载．
-在IOC容器阶段主要是完成资源的加载(如定义bean的xml文件)，bean的解析及对解析后得到的beanDefinition的进行注册．以xmlBeanFactory为例，XmlBeanFactory继承了DefaultListableBeanFactory，XmlBeanFactory将读取xml配置文件，解析bean和注册解析后的beanDefinition工作交给XmlBeanDefinitionReader(是BeanDefinitionReader接口的一个个性化实现)来执行.spring中定义了一套资源类，将文件，class等都看做资源．
-1)所以首先是将xml文件转化为资源然后用EncodeResouce来封装，该功能主要时考虑Resource可能存在编码要求的情况，如UTF-8等．
-2)然后根据xml文件判断xml的约束模式，是DTD还是Schema,以及寻找模式文档(验证文件)的方法(EntityResolver，这部分采用了代理模式和策略模式)．
-完成了前面所有的准备工作以后就可以正式的加载配置文件，获取Docoment和解析注册BeanDefinition．Docoment的获取以及BeanDefinition的解析注册并不是由XmlBeanDefinitionReader完成，XmlBeanDefinitionReader只是将前面的工作完成以后文档加载交给DefaultDocumentLoader类来完成．而解析交给了DefaultBeanDefinitionDocumentReader来处理.bean标签可以分为两种，一种是spring自带的默认标签，另一种就是用户自定义的标签．所以spring针对这两种情况，提供了不同的解析方式. 每种bean的解析完成后都会先注册到容器中然后最后发出响应事件，通知相关的监听器这个bean已经注册完成了．
-
-**bean的加载**
-http://zhengjianglong.cn/2015/12/06/Spring/spring-source-ioc-bean-parse/
-
-## spring中bean加载机制，bean生成的具体步骤
-1.容器寻找Bean的定义信息并且将其实例化。
-2.如果允许提前暴露工厂，则提前暴露这个bean的工厂，这个工厂主要是返回该未完全处理的bean．主要是用于避免单例属性循环依赖问题．
-3.受用**依赖注入**，Spring按照Bean定义信息配置Bean的所有属性。
-4.如果Bean实现了**BeanNameAware**接口，工厂调用Bean的**setBeanName()**方法传递Bean的ID。
-5.如果Bean实现了**BeanFactoryAware**接口，工厂调用**setBeanFactory()**方法传入工厂自身。
-6.如果**BeanPostProcessor**和Bean关联，那么它们的**postProcessBeforeInitialzation()**方法将被调用。
-7.如果Bean指定了init-method方法，它将被调用。
-8.如果有**BeanPsotProcessor**和Bean关联，那么它们的postProcessAfterInitialization()方法将被调用
-9.最后如果配置了destroy-method方法则注册**DisposableBean**.
-http://www.cnblogs.com/ITtangtang/p/3978349.html
+## Spring 事务
+一个业务逻辑方法往往包括一系列数据库原子访问操作，并且这些数据库原子访问操作应该绑定成一个整体，即要么全部执行，要么全部不执行，通过这种方式我们可以保证数据库的完整性，这就是**事务**。   
+Spring 框架中，最重要的事务管理的 API 有三个：TransactionDefinition、PlatformTransactionManager 和 TransactionStatus。 **所谓事务管理，实质上就是按照给定的事务规则来执行提交或者回滚操作。**其中，“给定的事务规则”是用 TransactionDefinition 表示的，“按照……来执行提交或者回滚操作”是用 PlatformTransactionManager 表示的，而 TransactionStatus 可以看作代表事务本身。  
+1. 事务隔离级别：**所谓事务的隔离级别是指若干个并发的事务之间的隔离程度**。TransactionDefinition 接口中定义了五个表示隔离级别的常量:  
+TransactionDefinition.ISOLATION_DEFAULT：这是默认值，表示使用底层数据库的默认隔离级别。对大部分数据库而言，该级别就是ISOLATION_READ_COMMITTED；  
+TransactionDefinition.ISOLATION_READ_UNCOMMITTED：该隔离级别表示一个事务可以读取另一个事务修改但还没有提交的数据，该级别不能防止脏读和不可重复读，因此很少使用该隔离级别；   
+TransactionDefinition.ISOLATION_READ_COMMITTED：该隔离级别表示一个事务只能读取另一个事务已经提交的数据。该级别可以防止脏读，这也是大多数情况下的推荐值。  
+TransactionDefinition.ISOLATION_REPEATABLE_READ：该隔离级别表示一个事务在整个过程中可以多次重复执行某个查询，并且每次返回的记录都相同。即使在多次查询之间有新增的数据满足该查询，这些新增的记录也会被忽略。该级别可以防止脏读和不可重复读  
+TransactionDefinition.ISOLATION_SERIALIZABLE：所有的事务依次逐个执行，这样事务之间就完全不可能产生干扰，也就是说，该级别可以防止脏读、不可重复读以及幻读。但是，这将严重影响程序的性能，通常情况下也不会用到该级别。   
+2. 事务传播行为  
+3. 事务超时.所谓事务超时，就是指一个事务所允许执行的最长时间，如果超过该时间限制但事务还没有完成，则自动回滚事务。  
+4. 事务的只读属性.事务的只读属性是指，对事务性资源进行只读操作或者是读写操作。  
+5. 事务的回滚规则.通常情况下，如果在事务中抛出了未检查异常（继承自 RuntimeException 的异常），则默认将回滚事务。如果没有抛出任何异常，或者抛出了已检查异常，则仍然提交事务。  
+**编程式事务管理**  
+**声明式事务管理** Spring 的声明式事务管理是建立在 Spring AOP 机制之上的，其本质是对目标方法前后进行拦截，并在目标方法开始之前创建或者加入一个事务，在执行完目标方法之后根据执行情况提交或者回滚事务。  
+声明式事务最大的优点就是不需要通过编程的方式管理事务，这样就不需要在业务逻辑代码中掺杂事务管理的代码，只需在配置文件中作相关的事务规则声明（或通过等价的基于标注的方式），便可以将事务规则应用到业务逻辑中。总的来说，声明式事务得益于 Spring IoC容器 和 Spring AOP 机制的支持：IoC容器为声明式事务管理提供了基础设施，使得 Bean 对于 Spring 框架而言是可管理的；而由于事务管理本身就是一个典型的横切逻辑（正是 AOP 的用武之地），因此 Spring AOP 机制是声明式事务管理的直接实现者。  
+显然，声明式事务管理要优于编程式事务管理，这正是spring倡导的非侵入式的开发方式。声明式事务管理使业务代码不受污染，一个普通的POJO对象，只要在XML文件中配置或者添加注解就可以获得完全的事务支持。因此，通常情况下，笔者强烈建议在开发中使用声明式事务，不仅因为其简单，更主要是因为这样使得纯业务代码不被污染，极大方便后期的代码维护。  
+基于 <tx> 命名空间的声明式事务管理 和 基于 @Transactional 的声明式事务管理  
+**就Spring 声明式事务而言，无论其基于 <tx> 命名空间的实现还是基于 @Transactional 的实现，其本质都是 Spring AOP 机制的应用：即通过以@Transactional的方式或者XML配置文件的方式向业务组件中的目标业务方法插入事务增强处理并生成相应的代理对象供应用程序(客户端)使用从而达到无污染地添加事务的目的。**
 
 
-## springMVC流程具体叙述下
-当应用启动时,容器会加载servlet类并调用init方法. 在这个阶段，DispatcherServlet在init()完成初始化参数init-param的解析和封装,相关配置,spring的WebApplicationContext的初始化即完成xml文件的加载,bean的解析和注册等工作,另外为servlet功能所用的变量进行初始化,如:handlerMapping,viewResolvers等.
 
-当用户发送一个请求时，首先根据请求的类型调用DispatcherServlet不同的方法，这些方法都会转发到doService()中执行．在该方法内部完成以下工作：
-1)spring首先考虑multipart的处理,如果是MultipartContent类型的request,则将该请求转换成MultipartHttpServletRequest类型的request.
-2)根据request信息获取对应的Handler. 首先根据request获取访问路径,然后根据该路径可以选择直接匹配或通用匹配的方式寻找Handler,即用户定义的controller. Handler在init()方法时已经完成加载且保存到Map中了,只要根据路径就可以得到对应的Handler. 如果不存在则尝试使用默认的Handler. 如果还是没有找到那么就通过response向用户返回错误信息.找到handler后会将其包装在一个执行链中,然后将所有的拦截器也加入到该链中.
-4)如果存在handler则根据当前的handler寻找对应的HandlerAdapter. 通过遍历所有适配器来选择合适的适配器.
-5)SpringMVC允许你通过处理拦截器Web请求,进行前置处理和后置处理.所以在正式调用 Handler的逻辑方法时,先执行所有拦截器的preHandle()方法.
-6)正式执行handle的业务逻辑方法handle(),返回ModelAndView.逻辑处理是通过适配器调用handle并返回视图.这过程其实是调用用户controller的业务逻辑.
-8)调用拦截器的postHandle()方法,完成后置处理.
-9)根据视图进行页面跳转.该过程首先会根据视图名字解析得到视图,该过程支持缓存,如果缓存中存在则直接获取,否则创建新的视图并在支持缓存的情况下保存到缓冲中.该10)过程完成了像添加前缀后缀,设置必须的属性等工作.最后就是进行页面跳转处理.
-11)调用拦截器的afterComplection()
+http://blog.csdn.net/justloveyou_/article/details/73733278
 
+-----------------
 ## spring各个版本的区别
 
 
@@ -159,16 +155,6 @@ http://www.cnblogs.com/ITtangtang/p/3978349.html
 3)静态工厂注入  factory-method参数
 4)实例工厂
 http://blessht.iteye.com/blog/1162131
-
-## AOP相关概念
-**方面（Aspect）**：一个关注点的模块化，这个关注点实现可能另外横切多个对象。事务管理是J2EE应用中一个很好的横切关注点例子。方面用Spring的 Advisor或拦截器实现。
-**连接点（Joinpoint）**: 程序执行过程中明确的点，如方法的调用或特定的异常被抛出。
-**通知（Advice）:** 在特定的连接点，AOP框架执行的动作。各种类型的通知包括“around”、“before”和“throws”通知。通知类型将在下面讨论。许多AOP框架包括Spring都是以拦截器做通知模型，维护一个“围绕”连接点的拦截器链。Spring中定义了4个advice.Interception Around(MethodInterceptor)、Before(MethodBeforeAdvice)、After Returning(AfterReturningAdvice)、After(AfterAdvice)。
-**切入点（Pointcut）**: 一系列连接点的集合。AOP框架必须允许开发者指定切入点：例如，使用正则表达式。 Spring定义了Pointcut接口，用来组合MethodMatcher和ClassFilter，可以通过名字很清楚的理解， MethodMatcher是用来检查目标类的方法是否可以被应用此通知，而ClassFilter是用来检查Pointcut是否应该应用到目标类上
-**引入（Introduction）**: 添加方法或字段到被通知的类。 Spring允许引入新的接口到任何被通知的对象。例如，你可以使用一个引入使任何对象实现 IsModified接口，来简化缓存。Spring中要使用Introduction, 可有通过DelegatingIntroductionInterceptor来实现通知，通过DefaultIntroductionAdvisor来配置Advice和代理类要实现的接口
-**目标对象（Target Object）**: 包含连接点的对象。也被称作被通知或被代理对象。POJO
-**AOP代理（AOP Proxy）**: AOP框架创建的对象，包含通知。 在Spring中，AOP代理可以是JDK动态代理或者CGLIB代理。
-**织入（Weaving）**: 组装方面来创建一个被通知对象。这可以在编译时完成（例如使用AspectJ编译器），也可以在运行时完成。Spring和其他纯Java AOP框架一样，在运行时完成织入。
 
 ## spring何时创建applicationContext(web.xml中使用listener 或dispatcherServlet)
 
@@ -410,8 +396,6 @@ WebApplicationContext继承了ApplicationContext，并添加了一些web应用�
 
 http://www.codeceo.com/article/spring-top-25-interview.html
 
-个人公众号（欢迎关注）：
-![](/assets/weix_gongzhonghao.jpg)
 
 
 

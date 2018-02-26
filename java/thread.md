@@ -68,10 +68,10 @@ wait() 是 Object 类的方法，对此对象调用 wait()方法导致本线程�
 ④ sleep() 方法比 yield() 方法（跟操作系统相关）具有更好的可移植性。  
 
 ## 避免死锁的常见方法：
-1)避免一个线程同时获取多个锁
-2)避免一个线程在锁内同时占用多个资源，尽量保证每个锁只占用一个资源
-3)尝试使用定时锁，使用lock.tryLock(timeout)来替代使用内部锁机制。
-4)对数据库锁，加锁和解锁必须在一个数据库连接里，否则会出现解锁失败的情况。
+1)避免一个线程同时获取多个锁  
+2)避免一个线程在锁内同时占用多个资源，尽量保证每个锁只占用一个资源  
+3)尝试使用定时锁，使用lock.tryLock(timeout)来替代使用内部锁机制。  
+4)对数据库锁，加锁和解锁必须在一个数据库连接里，否则会出现解锁失败的情况。  
 
 ## 什么是死锁？死锁的必要条件？怎么克服？
 答：
@@ -94,30 +94,30 @@ d 从另外一些进程那里强行剥夺足够数量的资源分配给死锁进
 **ArrayBlockingQueue**：基于数组实现的一个阻塞队列，在创建ArrayBlockingQueue对象时必须制定容量大小。并且可以指定公平性与非公平性，默认情况下为非公平的，即不保证等待时间最长的队列最优先能够访问队列。  
 **LinkedBlockingQueue**：基于链表实现的一个阻塞队列，在创建LinkedBlockingQueue对象时如果不指定容量大小，则默认大小为Integer.MAX_VALUE。  
 **PriorityBlockingQueue**：以上2种队列都是先进先出队列，而PriorityBlockingQueue却不是，它会按照元素的优先级对元素进行排序，按照优先级顺序出队，每次出队的元素都是优先级最高的元素。注意，此阻塞队列为无界阻塞队列，即容量没有上限（通过源码就可以知道，它没有容器满的信号标志），前面2种都是有界队列。  
-**SynchronousQueue**：同步移交，不是一个真正的队列，而是一种在线程之间进行的移交机制。对于非常大的或者无界的线程池，可以通过SynchronousQueue来避免排队，以及直接将任务从生产者移交给工作者线程。
-内部最关键的两个方法，put（）和take（）。本质上使用了Condition的 await（）和signal（）。
+**SynchronousQueue**：同步移交，不是一个真正的队列，而是一种在线程之间进行的移交机制。对于非常大的或者无界的线程池，可以通过SynchronousQueue来避免排队，以及直接将任务从生产者移交给工作者线程。  
+内部最关键的两个方法，**put（）和take（）**。本质上使用了Condition的 await（）和signal（）。
 
 ## 线程池（thread pool）
 答：在面向对象编程中，创建和销毁对象是很费时间的，因为创建一个对象要获取内存资源或者其它更多资源。在 Java 中更是如此，虚拟机将试图跟踪每一个对象，以便能够在对象销毁后进行垃圾回收。所以提高服务程序效率的一个手段就是尽可能减少创建和销毁对象的次数，特别是一些很耗资源的对象创建和销毁，这就是"池化资源"技术产生的原因。线程池顾名思义就是事先创建若干个可执行的线程放入一个池（容器）中，需要的时候从池中获取线程不用自行创建，使用完毕不需要销毁线程而是放回池中，从而减少创建和销毁线程对象的开销。另外一个额外的好处是，当请求达到时，工作线程通常已经存在，因此不会由于等待创建线程而延迟任务的执行，从而提高了响应时间。  
 java.uitl.concurrent.**ThreadPoolExecutor**类是线程池中最核心的一个类，因此如果要透彻地了解Java中的线程池，必须先了解这个类。ThreadPoolExecutor继承了AbstractExecutorService类，并提供了四个构造器，事实上，通过观察每个构造器的源码具体实现，发现前面三个构造器都是调用的第四个构造器进行的初始化工作。分析下构造函数的各个参数：  
-1、**corePoolSize**：核心池的大小，这个参数跟后面讲述的线程池的实现原理有非常大的关系。在创建了线程池后，默认情况下，线程池中并没有任何线程，而是等待有任务到来才创建线程去执行任务，除非调用了prestartAllCoreThreads()或者prestartCoreThread()方法，从这2个方法的名字就可以看出，是预创建线程的意思，即在没有任务到来之前就创建corePoolSize个线程或者一个线程。默认情况下，**在创建了线程池后，线程池中的线程数为0**，当有任务来之后，就会创建一个线程去执行任务，当线程池中的线程数目达到corePoolSize后，就会把到达的任务放到缓存队列当中；  
-2、**maximumPoolSize**：线程池最大线程数，这个参数也是一个非常重要的参数，它表示在线程池中最多能创建多少个线程；  
+1、**corePoolSize**：**核心池的大小**，这个参数跟后面讲述的线程池的实现原理有非常大的关系。在创建了线程池后，默认情况下，线程池中并没有任何线程，而是等待有任务到来才创建线程去执行任务，除非调用了prestartAllCoreThreads()或者prestartCoreThread()方法，从这2个方法的名字就可以看出，是预创建线程的意思，即在没有任务到来之前就创建corePoolSize个线程或者一个线程。默认情况下，**在创建了线程池后，线程池中的线程数为0**，当有任务来之后，就会创建一个线程去执行任务，当线程池中的线程数目达到corePoolSize后，就会把到达的任务放到缓存队列当中；  
+2、**maximumPoolSize**：**线程池最大线程数**，这个参数也是一个非常重要的参数，它表示在线程池中最多能创建多少个线程；  
 3、**keepAliveTime**：表示线程没有任务执行时最多保持多久时间会终止。默认情况下，只有当线程池中的线程数大于corePoolSize时，keepAliveTime才会起作用，直到线程池中的线程数不大于corePoolSize，即当线程池中的线程数大于corePoolSize时，如果一个线程空闲的时间达到keepAliveTime，则会终止，直到线程池中的线程数不超过corePoolSize。但是如果调用了allowCoreThreadTimeOut(boolean)方法，在线程池中的线程数不大于corePoolSize时，keepAliveTime参数也会起作用，直到线程池中的线程数为0；  
-4、**unit**：参数keepAliveTime的时间单位，有7种取值，在TimeUnit类中有7种静态属性：
-5、workQueue：一个阻塞队列，用来存储等待执行的任务，这个参数的选择也很重要，会对线程池的运行过程产生重大影响，一般来说，这里的阻塞队列有以下几种选择：ArrayBlockingQueue、LinkedBlockingQueue、SynchronousQueue。  
-6、threadFactory：线程工厂，主要用来创建线程；  
+4、**unit**：参数keepAliveTime的时间单位，有7种取值，在TimeUnit类中有7种静态属性：  
+5、**workQueue**：一个阻塞队列，用来存储等待执行的任务，这个参数的选择也很重要，会对线程池的运行过程产生重大影响，一般来说，这里的阻塞队列有以下几种选择：ArrayBlockingQueue、LinkedBlockingQueue、SynchronousQueue。  
+6、**threadFactory**：线程工厂，主要用来创建线程；  
 7、handler：表示当拒绝处理任务时的策略。  
-在前面我们多次提到了**任务缓存队列**，即workQueue，它用来存放等待执行的任务。  
+在前面我们多次提到了**任务缓存队列**，即**workQueue**，它用来存放等待执行的任务。  
 workQueue的类型为BlockingQueue<Runnable>，通常可以取下面三种类型：  
 1）ArrayBlockingQueue：基于数组的先进先出队列，此队列创建时必须指定大小；  
 2）LinkedBlockingQueue：基于链表的先进先出队列，如果创建时没有指定此队列大小，则默认为Integer.MAX_VALUE；   
-3）synchronousQueue：这个队列比较特殊，它不会保存提交的任务，而是将直接新建一个线程来执行新来的任务。  
+3）SynchronousQueue：这个队列比较特殊，它不会保存提交的任务，而是将直接新建一个线程来执行新来的任务。  
 **饱和策略：**  
 当线程池的任务缓存队列已满并且线程池中的线程数目达到maximumPoolSize，如果还有任务到来就会采取任务拒绝策略，通常有以下四种策略：  
 ThreadPoolExecutor.AbortPolicy:**中止策略**。丢弃任务并抛出RejectedExecutionException异常。默认的饱和策略
 ThreadPoolExecutor.DiscardPolicy：**抛弃策略**。悄悄抛弃该任务，但是不抛出异常。
-ThreadPoolExecutor.DiscardOldestPolicy：**抛弃最旧策略**：抛弃下一个将被执行的任务，然后尝试重新提交新的任务。丢弃队列最前面的任务，然后重新尝试执行任务（重复此过程）
-ThreadPoolExecutor.CallerRunsPolicy：**调用者运行策略**：由调用线程处理该任务。将某些任务回退到调用者，将任务在调用execute时在主线程中执行。
+ThreadPoolExecutor.DiscardOldestPolicy：**抛弃最旧策略**：抛弃下一个将被执行的任务，然后尝试重新提交新的任务。丢弃队列最前面的任务，然后重新尝试执行任务（重复此过程）  
+ThreadPoolExecutor.CallerRunsPolicy：**调用者运行策略**：由调用线程处理该任务。将某些任务回退到调用者，将任务在调用execute时在主线程中执行。  
 **注意点**：
 如果当前线程池中的线程数目小于corePoolSize，则每来一个任务，就会创建一个线程去执行这个任务；  
 如果当前线程池中的线程数目>=corePoolSize，则每来一个任务，会尝试将其添加到任务缓存队列当中，若添加成功，则该任务会等待空闲线程将其取出去执行；若添加失败（一般来说是任务缓存队列已满），则会尝试创建新的线程去执行这个任务；   
@@ -136,7 +136,7 @@ ShutdownNow首先将线程池的状态设置成STOP,然后尝试停止所有正�
 
 ## CountDownLatch(闭锁) 与CyclicBarrier(栅栏)的区别
 在java 1.5中，提供了一些非常有用的辅助类来帮助我们进行并发编程，比如CountDownLatch，CyclicBarrier和Semaphore  
-**CountDownLatch**：比如有一个任务A，它要等待其他4个任务执行完毕之后才能执行，此时就可以利用CountDownLatch来实现这种功能了。public void await() throws InterruptedException { };   //调用await()方法的线程会被挂起，它会等待直到count值为0才继续执行。 
+**CountDownLatch**：比如有一个任务A，它要等待其他4个任务执行完毕之后才能执行，此时就可以利用CountDownLatch来实现这种功能了。public void await() throws InterruptedException { };   //调用await()方法的线程会被挂起，它会等待直到count值为0才继续执行。   
 **CyclicBarrier**：字面意思回环栅栏，通过它可以实现让一组线程等待至某个状态之后再全部同时执行。叫做回环是因为当所有等待线程都被释放以后，CyclicBarrier可以被重用。我们暂且把这个状态就叫做barrier，当调用await()方法之后，线程就处于barrier了。   
 **CountDownLatch**: 允许一个或多个线程等待其他线程完成操作. **CyclicBarrier**：阻塞一组线程直到某个事件发生。     
 1. 闭锁用于等待事件、栅栏是等待线程.  
@@ -145,6 +145,7 @@ ShutdownNow首先将线程池的状态设置成STOP,然后尝试停止所有正�
 4. CountDownLatch一个线程(或者多个)，等待另外N个线程完成某个事情之后才能执行。CyclicBarrier是N个线程相互等待，任何一个线程完成之前，所有的线程都必须等待。   
 CountDownLatch 是计数器, 线程完成一个就记一个,就像报数一样, 只不过是递减的.  
 而CyclicBarrier更像一个水闸, 线程执行就像水流, 在水闸处都会堵住, 等到水满(线程到齐)了, 才开始泄流.   
+ 
 **Semaphore**翻译成字面意思为 信号量，Semaphore可以控同时访问的线程个数，通过 acquire() 获取一个许可，如果没有就等待，而 release() 释放一个许可。
 
 ## Timer和TimerTask
