@@ -164,5 +164,10 @@ response.sendRedirect("new.jsp");//重定向到new.jsp
 **Session和Cookie的主要区别：**Cookie是把用户的数据写给用户的浏览器。Session技术把用户的数据写到用户独占的session中。Session对象由服务器创建，开发人员可以调用request对象的getSession方法得到session对象。  
 **服务器是如何实现一个session为一个用户浏览器服务的**服务器创建session出来后，会把session的id号，以cookie的形式回写给客户机，这样，只要客户机的浏览器不关，再去访问服务器时，都会带着session的id号去，服务器发现客户机浏览器带session id过来了，就会使用内存中与之对应的session为之服务。  
 
-
+## RESTFULL风格
+Representational State Tranfer   
+1. 每个URI代表一种资源  
+2. 客户端和服务器之间，传递这种资源的某种表现层。  
+3. 客户端通过四个HTTP动词，对服务端资源进行操作，实现表现层转化。  
+早期的WEB MVC框架设计者们没有意识地将URL当作抽象资源来看待和设计。所以导致一个比较严重的问题：传统的Web MVC框架基本上只支持GET和POST两种HTTP，而不支持PUT和DELTE,随着框架发展，出现REST，一套支持HTTP规范的新风格。
 
