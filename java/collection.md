@@ -2,7 +2,7 @@
 Collection：List，Set   
 Map：Hashtable，HashMap，TreeMap   
 
-Collection  是单列集合
+Collection  是单列集合  
 List   元素是有序的(元素存取是有序)、可重复  
 有序的 collection，可以对列表中每个元素的插入位置进行精确地控制。可以根据元素的整数索引（在列表中的位置）访问元素，并搜索列表中的元素。可存放重复元素，元素存取是有序的。  
 List接口中常用类：  
@@ -96,33 +96,15 @@ Entry[]的长度一定后，随着map里面数据的越来越长，超过了加�
 2.链地址法   
 Java中hashmap的解决办法就是采用的链地址法。  
 HashMap 的底层数组长度为何总是2的n次方？  
-1. 不同的hash值发生碰撞的概率比较小，这样就会使得数据在table数组中分布较均匀，空间利用率较高，查询速度也较快；   
+1. 发生碰撞的概率比较小，这样就会使得数据在table数组中分布较均匀，空间利用率较高，查询速度也较快；   
 2. h&(length - 1) 就相当于对length取模，而且在速度、效率上比直接取模要快得多，即二者是等价不等效的，这是HashMap在速度和效率上的一个优化。  
 
 
 http://blog.csdn.net/justloveyou_/article/details/62893086
 
-## 我们能否使用任何类作为Map的key
- 我们可以使用任何类作为Map的key，然而在使用它们之前，需要考虑以下几点：  
-（1）**如果类重写了equals()方法，它也应该重写hashCode()方法**。   
-（2）**类的所有实例需要遵循与equals()和hashCode()相关的规则**。请参考之前提到的这些规则。  
-（3）如果一个类没有使用equals()，你不应该在hashCode()中使用它。  
-（4）**用户自定义key类的最佳实践是使之为不可变的**，这样，hashCode()值可以被缓存起来，拥有更好的性能。不可变的类也可以确保hashCode()和equals()在未来不会改变，这样就会解决与可变相关的问题了。  
-    比如，我有一个类MyKey，在HashMap中使用它
-
-		//传递给MyKey的name参数被用于equals()和hashCode()中
-		MyKey key = new MyKey('Pankaj'); //assume hashCode=1234
-		myHashMap.put(key, 'Value');
-		// 以下的代码会改变key的hashCode()和equals()值
-		key.setName('Amit'); //assume new hashCode=7890
-		//下面会返回null，因为HashMap会尝试查找存储同样索引的key，而key已被改变了，匹配失败，返回null
-		myHashMap.get(new MyKey('Pankaj'));
-
-那就是为何String和Integer被作为HashMap的key大量使用
-
 ## HashMap和HashTable的区别
 HashMap和Hashtable都实现了Map接口，因此很多特性非常相似。但是，他们有以下不同点： 
-1. HashMap和Hashtable的实现模板不同：虽然二者都实现了Map接口，但HashTable继承于Dictionary类，而HashMap是继承于AbstractMap。Dictionary是是任何可将键映射到相应值的类的抽象父类，而AbstractMap是基于Map接口的骨干实现，它以最大限度地减少实现此接口所需的工作。   
+1. HashMap和Hashtable的实现模板不同：虽然二者都实现了Map接口，但HashTable继承于Dictionary类，而HashMap是继承于AbstractMap。Dictionary是任何可将键映射到相应值的类的抽象父类，而AbstractMap是基于Map接口的骨干实现，它以最大限度地减少实现此接口所需的工作。   
 2. HashMap和Hashtable对键值的限制不同：HashMap可以允许存在一个为null的key和任意个为null的value，但是HashTable中的key和value都不允许为null。  
 3. HashMap和Hashtable的线程安全性不同：Hashtable的方法是同步的，实现线程安全的Map；而HashMap的方法不是同步的，是Map的非线程安全实现。  
 4. HashMap和Hashtable的地位不同：在并发环境下，Hashtable虽然是线程安全的，但是我们一般不推荐使用它，因为有比它更高效、更好的选择ConcurrentHashMap；而单线程环境下，HashMap拥有比Hashtable更高的效率(Hashtable的操作都是同步的，导致效率低下)，所以更没必要选择它了。   
@@ -130,7 +112,7 @@ HashMap和Hashtable都实现了Map接口，因此很多特性非常相似。但�
 
 ## ConcurrentHashMap
 ConcurrentHashMap和Hashtable主要区别就是围绕着锁的粒度以及如何锁。  
-Hashtabl在竞争激烈的环境下表现效率低下的原因是一把锁锁住整张表，导致所有线程同时竞争一个锁。ConcurrentHashMap采用分段锁，每把锁锁住容器中的一个Segment。那么多线程访问容器里不同的Segment的数据时线程就不会存在竞争，从而有效提高并发访问效率。首先是将数据分层多个Segment存储，并为每个Segment分配一把锁，当一个线程范围其中一段数据时，其他线程可以访问其他段的数据。  
+Hashtable在竞争激烈的环境下表现效率低下的原因是一把锁锁住整张表，导致所有线程同时竞争一个锁。ConcurrentHashMap采用分段锁，每把锁锁住容器中的一个Segment。那么多线程访问容器里不同的Segment的数据时线程就不会存在竞争，从而有效提高并发访问效率。首先是将数据分层多个Segment存储，并为每个Segment分配一把锁，当一个线程范围其中一段数据时，其他线程可以访问其他段的数据。  
 在理想状态下，ConcurrentHashMap 可以支持 16 个线程执行并发写操作（如果并发级别设为16），及任意数量线程的读操作。  
 数据结构：  
 ConcurrentHashMap本质上是一个Segment数组，而一个Segment实例又包含若干个桶，每个桶中都包含一条由若干个 HashEntry 对象链接起来的链表。Segment 类继承于 ReentrantLock 类，从而使得 Segment 对象能充当锁的角色。ConcurrentHashMap不同于HashMap，它既不允许key值为null，也不允许value值为null。  
@@ -143,7 +125,7 @@ Segment的定位：根据key的hash值的高n位就可以确定元素到底在�
 ConcurrentHashMap高效的并发机制通过以下三点保证：  
 1. 通过锁分段技术保证并发环境下的写操作；
 2. 通过 HashEntry的不变性、Volatile变量的内存可见性和加锁重读机制保证高效、安全的读操作；
-3. 通过不加锁和加锁两种方案控制跨段操作的的安全性。（例如size方法先不加锁统计各个segment大小，如果统计过程中，容易的count发生变化，那再采用加锁的方式来统计）
+3. 通过不加锁和加锁两种方案控制跨段操作的的安全性。（例如size方法先不加锁统计各个segment大小，如果统计过程中，容器的count发生变化，那再采用加锁的方式来统计）
 
 ConcurrentHashMap的**弱一致性**主要是为了提升效率，也是一致性与效率之间的一种**权衡**。要成为强一致性，就得到处使用锁，甚至是全局锁，这就与Hashtable和同步的HashMap一样了。ConcurrentHashMap的弱一致性主要体现在以下几方面：  
 get操作是弱一致的：get操作只能保证一定能看到已完成的put操作；  
@@ -151,6 +133,11 @@ clear操作是弱一致的：在清除完一个segments之后，正在清理下�
 ConcurrentHashMap中的迭代操作是弱一致的(未遍历的内容发生变化可能会反映出来)：在遍历过程中，如果已经遍历的数组上的内容变化了，迭代器不会抛出ConcurrentModificationException异常。如果未遍历的数组上的内容发生了变化，则有可能反映到迭代过程中
 
 http://blog.csdn.net/justloveyou_/article/details/72783008
+
+## LinkedHashMap
+LinkedHashMap是HashMap的子类，所以LinkedHashMap自然会拥有HashMap的所有特性。HashMap是无序的，也就是说，迭代HashMap所得到的元素顺序并不是它们最初放置到HashMap的顺序。HashMap的这一缺点往往会造成诸多不便，因为在有些场景中，我们确需要用到一个可以保持插入顺序的Map。庆幸的是，JDK为我们解决了这个问题，它为HashMap提供了一个子类 —— LinkedHashMap。虽然LinkedHashMap增加了时间和空间上的开销，但是它通过维护一个额外的双向链表保证了迭代顺序。特别地，该迭代顺序可以是插入顺序，也可以是访问顺序。因此，根据链表中元素的顺序可以将LinkedHashMap分为：保持插入顺序的LinkedHashMap 和 保持访问顺序的LinkedHashMap，其中LinkedHashMap的默认实现是按插入顺序排序的。  
+与HashMap相比，LinkedHashMap增加了两个属性用于保证迭代顺序，分别是 双向链表头结点header 和 标志位accessOrder (值为true时，表示按照访问顺序迭代；值为false时，表示按照插入顺序迭代)。   
+LinkedHashMap采用的hash算法和HashMap相同，但是它重新定义了Entry。LinkedHashMap中的Entry增加了两个指针 before 和 after，它们分别用于维护双向链接列表。特别需要注意的是，next用于维护HashMap各个桶中Entry的连接顺序，before、after用于维护Entry插入的先后顺序的.   
 
 ## fail-fast机制
 迭代器的快速失败行为仅用于检测程序错误，产生的原因就是程序对collection进行迭代时，某个线程对该collection在结构上对其做了修改，此时抛出ConcurrentModificationException，从而产生fail-fast。在遍历一个集合的时候，我们可以使用并发集合类来避免ConcurrentModificationException，比如使用CopyOnWriteArrayList，而不是ArrayList。

@@ -85,7 +85,7 @@ Expression2 可以是得出一个值的任意表达式；这个值用于生成�
 补充：使用 Unicode 意味着字符在 JVM 内部和外部有不同的表现形式，在 JVM 内部都是 Unicode，当这个字符被从 JVM 内部转移到外部时（例如存入文件系统中），需要进行编码转换。所以 Java 中有字节流和字符流，以及在字符流和字节流之间进行转换的转换流，如 InputStreamReader 和 OutputStreamReader.
 
 ## String 和StringBuilder、StringBuffer 的区别
-答：Java 平台提供了两种类型的字符串：String 和StringBuffer / StringBuilder，它们可以储存和操作字符串。其中 String 是**只读**字符串，也就意味着 String 引用的字符串内容是不能被改变的。而 StringBuffer 和 StringBuilder 类表示的字符串对象可以直接进行修改。StringBuilder 是 JDK 1.5 中引入的，它和 StringBuffer 的方法完全相同，区别在于它是在单线程环境下使用的，因为它的所有方面都没有被 synchronized 修饰，因此它的效率也比 StringBuffer 略高。  
+答：Java 平台提供了两种类型的字符串：String 和StringBuffer / StringBuilder，它们可以储存和操作字符串。其中 String 是**只读**字符串，也就意味着 String 引用的字符串内容是不能被改变的。而 StringBuffer 和 StringBuilder 类表示的字符串对象可以直接进行修改。StringBuilder 是 JDK 1.5 中引入的，它和 StringBuffer 的方法完全相同，区别在于它是在单线程环境下使用的，因为它的所有方法都没有被 synchronized 修饰，因此它的效率也比 StringBuffer 略高。  
 有一个面试题问：有没有哪种情况用 + 做字符串连接比调用 StringBuffer / StringBuilder 对象的 append 方法性能更好？  
 如果连接后得到的字符串在静态存储区中是早已存在的，那么用+做字符串连接是优于 StringBuffer / StringBuilder 的 append 方法的。  
 如果在编写代码的过程中大量使用+进行字符串评价还是会对性能造成比较大的影响，但是使用的个数在1000以下还是可以接受的，大于10000的话，执行时间将可能超过1s，会对性能产生较大影响。如果有大量需要进行字符串拼接的操作，最好还是使用StringBuffer或StringBuilder进行。  
@@ -101,12 +101,7 @@ StringBuffer Sb = new StringBuilder(“This is only a”).append(“simple”).a
 这里JVM做了优化String S1 = “This is only a” + “ simple” + “ test”;相当于String S1 = “This is only a simple test”;  
 参见：http://www.findspace.name/easycoding/1090
 
-## String不可变性
-至于为什么要把 String 类设计成不可变类，是它的用途决定的。其实不只 String，很多 Java 标准类库中的类都是不可变的。在开发一个系统的时候，我们有时候也需要设计不可变类，来传递一组相关的值，这也是面向对象思想的体现。不可变类有一些优点，比如因为它的对象是只读的，所以多线程并发访问也不会有任何问题。当然也有一些缺点，比如每个不同的状态都要一个对象来代表，可能会造成性能上的问题。所以 Java 标准类库还提供了一个可变版本，即 StringBuffer。  
- Javac 编译可以对字符串常量直接相加的表达式进行优化，不必要等到运行期去进行加法运算处理，而是在**编译时去掉其中的加号**，直接将其编译成一个这些常量相连的结果。所以 
-		String s=“a”+”b”+”c”+”d”;只生成一个对象.
-
-## 为什么String要设计成不可变的**
+## 为什么String要设计成不可变的
 在Java中将String设计成不可变的是综合考虑到各种因素的结果,如内存,同步,数据结构以及安全等方面的考虑.  
 1. 字符串常量池的需要.  
  字符串池的实现可以在运行时节约很多heap空间，因为不同的字符串变量都指向池中的同一个字符串。但如果字符串是可变的，那么String interning将不能实现(译者注：String interning是指对不同的字符串仅仅只保存一个，即不会保存多个相同的字符串。)，因为这样的话，如果变量改变了它的值，那么其它指向这个值的变量的值也会一起改变。
@@ -169,16 +164,12 @@ public void wait(long timeout)在其他线程调用此对象的 notify() 方法�
 public void wait(long timeout, int nanos)在其他线程调用此对象的 notify() 方法或  
 
 注意：
-1.如果一个类实现了Cloneable,Object的clone方法就返回该对象的逐域拷贝，否则就会抛出CloneNotSupportException异常。java.lang.Cloneable 是一个标示性接口，不包含任何方法（详见《effective java》 p46）。   
+1。 如果一个类实现了Cloneable,Object的clone方法就返回该对象的逐域拷贝，否则就会抛出CloneNotSupportException异常。java.lang.Cloneable 是一个标示性接口，不包含任何方法（详见《effective java》 p46）。   
 2. 覆盖equals（）时总要覆盖hashCode（）（详见《effective java》p39）   
 在每个覆盖equals方法的类中也必须覆盖hashCode方法，如果不这样做就会导致Object.hashCode的通用约定---**相等的对象必须具有相等的散列码的约定**，从而导致该类无法集合所有基于散列集合一起工作，这样的集合有HashMap,HashSet和HashTable。HashMap等使用Key对象的hashCode()和equals()方法去决定key-value对的索引。如果将equals相等的对象认为是同一个对象的话，那么put方法将对象放在一个散列桶，而get方法可能从另一个散列桶获取该对象，因为这两个方法传入的对象虽然equals相同，但hashCode可能不同，而hashMap根据hashCode去定位散列桶位置导致出现在不同的散列桶中。  
  Hashcode的作用。  
 1. hashCode的存在主要是用于查找的快捷性，如Hashtable，HashMap等，hashCode是用来在散列存储结构中确定对象的存储地址的；  
 2. 比较对象是否相同。    
-一下是关于hashCode的约定：  
-1、如果两个对象相同，就是适用于equals(java.lang.Object) 方法，那么这两个对象的hashCode一定要相同；  
-2、如果对象的equals方法被重写，那么对象的hashCode也尽量重写，并且产生hashCode使用的对象，一定要和equals方法中使用的一致，否则就会违反上面提到的第2点；  
-3、两个对象的hashCode相同，并不一定表示两个对象就相同，也就是不一定适用于equals(java.lang.Object) 方法，只能够说明这两个对象在散列存储结构中，如Hashtable，他们“存放在同一个篮子里”。  
 
 ## try catch finally，try里有return，finally还执行么？
 1)不管有木有出现异常，finally块中代码都会执行   
@@ -192,7 +183,7 @@ public void wait(long timeout, int nanos)在其他线程调用此对象的 notif
 常见的非RuntimeException包括IOException、SQLException等。  
 **Error** **是程序无法处理的错误**，表示运行应用程序中**较严重问题**。这些错误大部分与代码编写者执行的操作无关，而与代码运行时的 JVM 、资源等有关。例如，Java虚拟机运行错误（Virtual MachineError），当 JVM 不再有继续执行操作所需的内存资源时，将出现 OutOfMemoryError。这些异常发生时，Java虚拟机（JVM）一般会选择线程终止。这些错误是不可查的，并且它们在应用程序的控制和处理能力之外。在 Java 中，错误通过Error的子类描述。  
 **Exception** 通常是Java程序员所关心的，其在Java类库、用户方法及运行时故障中都可能抛出。它由两个分支组成： **运行时异常**（派生于 RuntimeException 的异常）和**非运行时异常** 。划分这两种异常的规则是：由**程序错误**（一般是逻辑错误，如错误的**类型转换**、**数组越界**等，应该避免）导致的异常属于RuntimeException；而程序本身没有问题，但由于诸如**I/O这类错误**（eg：试图打开一个不存在的文件）导致的异常就属于非运行时异常。  
-Java的异常(包括Exception和Error)通常可分为 **受检查的异常**（checked exceptions） 和 **不受检查的异常**（unchecked exceptions） 两种类型。**不受检查异常是编译器不要求强制处理的异常**，包括运行时异常（RuntimeException与其子类）和错误（Error）。受检查异常是编译器要求必须处理的异常。这里所指的处理方式有两种： 捕获并处理异常 和声明抛出异常 。也就是说，当程序中可能出现这类异常，要么用 try-catch 语句捕获它，要么用 throws 子句声明抛出它，否则编译不会通过。  
+Java的异常(包括Exception和Error)通常可分为 **受检查的异常**（checked exceptions） 和 **不受检查的异常**（unchecked exceptions） 两种类型。**不受检查异常是编译器不要求强制处理的异常**，包括运行时异常（RuntimeException与其子类）和错误（Error）。**受检查异常是编译器要求必须处理的异常**。这里所指的处理方式有两种： 捕获并处理异常 和声明抛出异常 。也就是说，当程序中可能出现这类异常，要么用 try-catch 语句捕获它，要么用 throws 子句声明抛出它，否则编译不会通过。  
 
 解读：RuntimeException所表示的是软件开发人员没有正确地编写代码所导致的问题，如数组访问越界等。**如果程序出现RuntimeException异常，那么一定是程序员的问题**。而非运行时异常所表示的并不是代码本身的不足所导致的非正常状态，而是一系列应用本身也无法控制的情况。例如一个应用在尝试打开一个文件并写入的时候，该文件已经被另外一个应用打开从而无法写入。对于这些情况，**Java通过Checked Exception来强制软件开发人员在编写代码的时候就考虑对这些无法避免的情况的处理**，从而提高代码质量。而Error则是一系列很难通过程序解决的问题。这些问题基本上是无法恢复的，例如内存空间不足等。在这种情况下，我们基本无法使得程序重新回到正常轨道上。  
 **如何正确使用Checked Exception**。首先，Checked Exception应当只在异常情况对于API以及API的使用者都无法避免的情况下被使用。例如在打开一个文件的时候，API以及API的使用者都没有办法保证该文件一定存在。反过来，在通过索引访问数据的时候，如果API的使用者对参数index传入的是-1，那么这就是一个代码上的错误，是完全可以避免的。因此对于index参数值不对的情况，我们应该使用Unchecked Exception。其次，Checked Exception不应该被广泛调用的API所抛出。这一方面是基于代码整洁性的考虑，另一方面则是因为Checked Exception本身的实际意义是API以及API的使用者都无法避免的情况。如果一个应用有太多处这种“无法避免的异常”，那么这个程序是否拥有足够的质量也是一个很值得考虑的问题。而就API提供者而言，在一个主要的被广泛使用的功能上抛出这种异常，也是对其自身API的一种否定。再次，一个Checked Exception应该有明确的意义。这种明确意义的标准则是需要让API使用者能够看到这个Checked Exception所对应的异常类，该异常类所包含的各个域，并阅读相应的API文档以后就能够了解到底哪里出现了问题，进而向用户提供准确的有关该异常的解释。
