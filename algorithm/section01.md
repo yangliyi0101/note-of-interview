@@ -101,9 +101,9 @@
         int pivot = array[low];
         while(low < high){
         	  while(low < high && array[high] >= pivot) high--;
-        	  array[high] = array[low];
-        	  while(low < high && array[low] <= pivot) low++;
         	  array[low] = array[high];
+        	  while(low < high && array[low] <= pivot) low++;
+        	  array[high] = array[low];
         }
         array[low] = pivot;
         return low;
