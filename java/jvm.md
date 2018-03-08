@@ -46,7 +46,7 @@ GC Roots对象一般是：虚拟机栈中的引用对象，方法区中类静态
 **ParNew**: 是Serial收集器的多线程版本，垃圾回收时采用多线程方式进行回收。默认情况下使用的线程数是cpu数量。除了serial收集器，目前只有它能和CMS收集器配合工作。采用复制算法。  
 **Parallel Scavenge**: 使用复制算法收集器，也是一个并行的多线程收集器。Parallel Scavenge收集器与其他收集器关注点不同，其它收集器主要关注缩短垃圾回收时用户线程的停顿时间。而它关心**吞吐量**，即**运行用户代码时间/(运行用户代码时间+垃圾收集时间)**。停顿时间越短越适合需要与用户交互的程序，高吞吐量则可以最高效率的利用CPU时间。一般情况下，停顿时间下降，吞吐量也会下降。采用复制算法。  
 **Serial Old**: 老年代，单线程收集器，使用**标记整理算法**。主要有两个用途，一是和Parallel Scavenge 收集器配合使用，二是作为CMS的后备方案在并发收集器发生**Concurrent Mode Failure**时候使用。  
-**Parallel Old**:并行的老年代版本收集器，使用标记整理算法。主要与Parallel Scavenge配合使用。在注重高吞吐量以及CPU资源敏感的场合，都可以优先考虑Parallel Scavenge家Parallel Old收集器。  
+**Parallel Old**:并行的老年代版本收集器，使用**标记整理算法**。主要与Parallel Scavenge配合使用。在注重高吞吐量以及CPU资源敏感的场合，都可以优先考虑Parallel Scavenge家Parallel Old收集器。  
 **CMS**：是以获得最短回收停顿时间为目标的收集器，使用标记清除算法。整个过程包括4个：  
   **初始标记**: 标记GC ROOTS能直接关联到的对象  
   **并发标记**：进行Roots Traceing的过程  

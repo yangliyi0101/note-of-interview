@@ -34,7 +34,17 @@ synchronized**内置锁**是一种**对象锁**(锁的是对象而非引用)，�
 4、通过Lock可以知道有没有成功获取锁，而synchronized却无法办到；  
 5、Lock可以提高多个线程进行读操作的效率。  
 在性能上来说，如果竞争资源不激烈，两者的性能是差不多的。而当竞争资源非常激烈时（即有大量线程同时竞争），此时Lock的性能要远远优于synchronized。Lock更加灵活。所以说，在具体使用时要根据适当情况选择。
-		
+
+## 实现多线程的三种方式
+1）继承 Thread 类，重写run()方法。  
+优点：编程简单，如果需要访问当前线程，无需使用Thread.currentThread()方法，直接使用this，即可获得当前线程。
+2）实现 Runnable 接口，重写了run（）方法。启动 Runnable 实例时，需要放在 Thread 中，然后调用 start() 方法。   
+
+实际上 Thread 类本身就实现了 Runnable 接口  class Thread implements Runnable {  
+优点：线程只是实现了Runnable()接口，还可以继承其他类。在这种方式下，可以多个线程共享同一个目标对象。 
+
+3）实现 Callable 接口。Java 5 开始提供，可以返回结果（通过 Future），也可以抛出异常，需要实现的是 call() 方法，这也是和Runnable不同的地方。
+
 ## ThreadLocal
 ThreadLocal 又名 **线程局部变量** ，是 Java 中一种较为特殊的**线程绑定机制**，可以为每一个使用该变量的线程都提供一个变量值的副本，并且每一个线程都可以独立地改变自己的副本，而不会与其它线程的副本发生冲突。如果一个某个变量要被某个线程 **独享**，那么我们就可以通过ThreadLocal来实现线程本地存储功能。  
 get()方法是用来获取 ThreadLocal变量 在当前线程中保存的值。  

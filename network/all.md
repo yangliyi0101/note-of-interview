@@ -81,6 +81,20 @@ https://github.com/jawil/blog/issues/14
 快重传：当发送方连续收到三个重复的ACK报文时，直接重传对方尚未收到的报文段，而不必等待那个报文段设置的重传计时器超时。  
 快恢复：当发送端收到连续三个冗余的ACK时，就执行“乘法减小”算法，把慢启动阈值ssthresh减半，cwnd设置为慢启动阈值减半后的数值（与慢启动不同）。  
 
+## http消息的结构
+请求消息的结构（request):  
+Request 消息分为3部分，第一部分叫Request line（请求行）, 第二部分叫Request header（请求头）, 第三部分是body（请求体）. header和body之间有个空行。  
+![](https://pic002.cnblogs.com/images/2012/263119/2012020914293943.png)  
+第一行中的Method表示请求方法,比如"POST","GET",  Path-to-resoure表示请求的资源， Http/version-number 表示HTTP协议的版本号。  
+请求头里面包括Accept、Accept-Language、Content-Type、Accept-Encoding、Cookie等等
+
+Response消息的结构, 和Request消息的结构基本一样。 同样也分为三部分,第一部分叫Response line（响应行）, 第二部分叫Response header（响应头），第三部分是body（响应体）. header和body之间也有个空行  
+![](https://pic002.cnblogs.com/images/2012/263119/2012021309365350.png)
+
+tips：响应头里的cookie域 有set-cookie 将cookie写入到客户端里。请求头里的cookie域 将cookie传给服务器。  
+tips：请求头里cache域 If-Modified—Since如果和响应头Entity域的last-modified相同，则直接使用客户端的缓存文件。  
+http://www.cnblogs.com/rayray/p/3729533.html
+
 ## http和https的区别
 1. https协议需要到ca申请证书，一般免费证书很少，需要交费。  
 2. http是超文本传输协议，信息是明文传输，https 则是具有安全性的ssl加密传输协议 http和https使用的是完全不同的连接方式用的端口也不一样：前者是80，后者是443。  
@@ -115,7 +129,7 @@ http://www.admin5.com/article/20150708/608526.shtml
 	206：Partial Content对资源的某一部分的请求  
 	3**：重定向状态码  
 	301：Moved Permanently 永久重定向  
-	302：Found 临时性重定向  
+	302：Found 临时性重定向  (用的比较多，新的url会在响应头的location中返回，浏览器会自动使用新的url发起请求)
 	304：Not Modified 缓存中读取  
 	4**：客户端错误状态码  
 	400：Bad Request 请求报文中存在语法错误  
@@ -134,19 +148,17 @@ http://www.admin5.com/article/20150708/608526.shtml
 ## get提交和post提交的区别
 1.根据HTTP规范，GET用于信息获取，而且应该是安全的和幂等的。  
 　　(1).所谓安全的意味着该操作用于获取信息而非修改信息。换句话说，GET 请求一般不应产生副作用。就是说，它仅仅是获取资源信息，就像数据库查询一样，不会修改，增加数据，不会影响资源的状态。  
-　　(2).幂等的意味着对同一URL的多个请求应该返回同样的结果。  
+　　(2).幂等的意味着对同一URL的多个请求应该返回同样的结果。（应该为具有相同的副作用）  
 2.根据HTTP规范，POST表示可能修改变服务器上的资源的请求。还是新闻以网站为例，读者对新闻发表自己的评论应该通过POST实现，因为在评论提交后站点的资源已经不同了，或者说资源被修改了。  
 3.GET请求的数据会附在URL之后（就是把数据放置在HTTP协议头中），以?分割URL和传输数据，参数之间以&相连.POST把提交的数据则放置在是HTTP包的包体中。  
 4.GET安全性较低，POST安全性较高。因为GET在传输过程，数据被放在请求的URL中，而如今现有的很多服务器、代理服务器或者用户代理都会将请求URL记录到日志文件中，然后放在某个地方，这样就可能会有一些隐私的信息被第三方看到。另外，用户也可以在浏览器上直接看到提交的数据，一些系统内部消息将会一同显示在用户面前。  
 5.get传送的数据量较小，不能大于2KB。post传送的数据量较大，一般被默认为不受限制。  
 6.在FORM（表单）中，Method默认为"GET"  
 
-幂等（idempotent、idempotence）是一个数学或计算机学概念，常见于抽象代数中。  
-　　幂等有一下几种定义：  
-　　对于单目运算，如果一个运算对于在范围内的所有的一个数多次进行该运算所得的结果和进行一次该运算所得的结果是一样的，那么我们就称该运算是幂等的。比如绝对值运算就是一个例子，在实数集中，有abs(a)=abs(abs(a))。  
-　　对于双目运算，则要求当参与运算的两个值是等值的情况下，如果满足运算结果与参与运算的两个值相等，则称该运算幂等，如求两个数的最大值的函数，有在在实数集中幂等，即max(x,x) = x。  
-详见: http://www.cnblogs.com/hyddd/archive/2009/03/31/1426026.html
-http://www.cnblogs.com/skynet/archive/2010/05/18/1738301.html
+HTTP GET方法用于获取资源，不应有副作用，所以是幂等的。比如：GET http://www.bank.com/account/123456，不会改变资源的状态，不论调用一次还是N次都没有副作用。请注意，这里强调的是**一次和N次具有相同的副作用**，而不是每次GET的结果相同。GET http://www.news.com/latest-news这个HTTP请求可能会每次得到不同的结果，但它本身并没有产生任何副作用，因而是满足幂等性的。   
+HTTP DELETE方法用于删除资源，有副作用，但它应该满足幂等性。比如：DELETE http://www.forum.com/article/4231，调用一次和N次对系统产生的副作用是相同的，即删掉id为4231的帖子；因此，调用者可以多次调用或刷新页面而不必担心引起错误。  
+POST所对应的URI并非创建的资源本身，而是资源的接收者。比如：POST http://www.forum.com/articles的语义是在http://www.forum.com/articles下创建一篇帖子，HTTP响应中应包含帖子的创建状态以及帖子的URI。两次相同的POST请求会在服务器端创建两份资源，它们具有不同的URI；所以，POST方法不具备幂等性。而PUT所对应的URI是要创建或更新的资源本身。比如：PUT http://www.forum/articles/4231的语义是创建或更新ID为4231的帖子。对同一URI进行多次PUT的副作用和一次PUT是相同的；因此，PUT方法具有幂等性。
+https://www.cnblogs.com/weidagang2046/archive/2011/06/04/idempotence.html
 
 ## 重定向和转发的区别
 request.getRequestDispatcher("new.jsp").forward(request, response);//转发到new.jsp  
