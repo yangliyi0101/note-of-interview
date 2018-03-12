@@ -75,7 +75,7 @@ LinkedList 比 ArrayList **更占内存**，因为 LinkedList 为每一个节点
 ## LinkedList 和PriorityQueue 的区别
 **Queue中只有两个实现类LinkedList 和PriorityQueue**。他们都是属于队列，即拥有先进先出（FIFO）的特点。而这两个类的区别在于他们的排序行为并非性能。  
 LinkedList 支持双向列表操作，既可以作为队列 也可以作为堆栈。  
-PriorityQueue 按优先权控制队列元素的出队次序。（列表中的排序顺序是通过实现Comparable来控制的）  
+PriorityQueue 按优先权控制队列元素的出队次序。（列表中的排序顺序是通过实现Comparable来控制的）(可实现大顶堆和小顶堆)  
 
 ## HashMap实现原理
 **数据结构**： HashMap基于哈希算法，采用链地址法来避免hash冲突，所以其内部采用链表加数组数据结构，HashMap默认的初始容量是16，**负载因子是0.75**。我们通过put()和get()方法储存和获取对象。HashMap里面实现一个静态内部类Entry, Entry其重要的属性有key , value, next，hash。用该Entry定义了一个链表的数组用来存放数据，这种方法叫做链地址法，是为了避免hash冲突。  
@@ -101,6 +101,13 @@ HashMap 的底层数组长度为何总是2的n次方？
 
 
 http://blog.csdn.net/justloveyou_/article/details/62893086
+
+## JDK1.8对HashMap的优化
+1）JDK1.8之前 在求桶的下标序号时需要4次扰动计算，而JDK1.8只需要一次，将后16位与前16位异或，稍许会提高性能。   
+2）JDK7中HashMap采用的是位桶+链表的方式。而JDK8中采用的是位桶+链表/红黑树的方式，当某个位桶的链表的长度超过8的时候，这个链表就将转换成红黑树。  
+3）重哈希，JDK7里的重哈希是 遍历老的数组，重新计算新的索引插入到新的数组中。而JDK的代码里是这么处理的，把链表上的键值对按hash值分成lo和hi两串，lo串的新索引位置与原先相同[原先位置j]，hi串的新索引位置为[原先位置j+oldCap]. 判断条件if ((e.hash & oldCap) == 0)，如果条件为真，加入lo串，条件为假，加入hi串。那这是为什么？因为这个&运算其实相当于做了一个掩码，查看原来的hash值新增的那个bit是1还是0就好了，是0的话索引没变，是1的话索引变成“原索引+oldCap”。   
+
+ConcurrentHashmap也有了巨大的的升级，同样底层引入了红黑树，并且摒弃segment方式，采用新的CAS算法思路去实现线程安全，再次把ConcurrentHashmap的性能提升了一个台阶。
 
 ## HashMap和HashTable的区别
 HashMap和Hashtable都实现了Map接口，因此很多特性非常相似。但是，他们有以下不同点： 

@@ -16,4 +16,13 @@ http://www.ruanyifeng.com/blog/2017/05/websocket.html
 
 ## WebService
 Web service让你的网站可以使用其他网站的资源，比如在网页上显示天气、地图、twitter上的最新动态等等。   
-Web Service架构的基本思想，就是尽量把非核心功能交给其他人去做，自己全力开发核心功能。  
+Web Service架构的基本思想，就是尽量把非核心功能交给其他人去做，自己全力开发核心功能。    
+
+## IaaS，PaaS，SaaS的区别
+你可以从头到尾，自己生产披萨，但是这样比较麻烦，需要准备的东西多，因此你决定外包一部分工作，采用他人的服务。你有三个方案。
+
+IaaS：基础设施服务，Infrastructure-as-a-service 他人提供厨房、炉子、煤气，你使用这些基础设施，来烤你的披萨。 
+
+PaaS：平台服务，Platform-as-a-service 除了基础设施，他人还提供披萨饼皮。
+
+SaaS：软件服务，Software-as-a-service 他人直接做好了披萨，不用你的介入，到手的就是一个成品。你要做的就是把它卖出去，最多再包装一下，印上你自己的 Logo。

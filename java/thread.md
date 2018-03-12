@@ -198,7 +198,10 @@ CopyOnWrite容器即写时复制的容器。通俗的理解是当我们往一个
 CopyOnWrite并发容器用于读多写少的并发场景。主要有两个缺点：内存占用问题。数据一致性问题。CopyOnWrite容器只能保证数据的最终一致性，不能保证数据的实时一致性。所以如果你希望写入的的数据，马上能读到，请不要使用CopyOnWrite容器。  
 
 http://www.cnblogs.com/dolphin0520/p/3938914.html
-  
+
+## 同步器AQS 
+AQS(AbstractQueuedSynchronizer类)是一个用来构建锁和同步器的框架,它在内部定义了一个int state变量,用来表示同步状态.在LOCK包中的相关锁(常用的有ReentrantLock、 ReadWriteLock)都是基于AQS来构建.然而这些锁都没有直接来继承AQS,而是定义了一个Sync类去继承AQS.那么为什么要这样呢?because:锁面向的是使用用户,而同步器面向的则是线程控制,那么在锁的实现中聚合同步器而不是直接继承AQS就可以很好的隔离二者所关注的事情. 
+
 ## 线程的几种可用状态
 线程在运行周期里有6中不同的状态。
 1. New 新建

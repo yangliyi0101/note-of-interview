@@ -89,15 +89,99 @@ Spring从两个角度来实现自动化装配：
 
 
 ## AOP是怎么实现的
-实现AOP的技术，主要分为两大类：一是采用**动态代理技术**，利用截取消息的方式，对该消息进行装饰，以取代原有对象行为的执行；二是采用**静态织入**的方式，引入特定的语法创建“方面”，从而使得编译器可以在编译期间织入有关“方面”的代码。Spring AOP 的实现原理其实很简单：AOP 框架负责动态地生成 AOP 代理类，这个代理类的方法则由 Advice 和回调目标对象的方法所组成,并将该对象可作为目标对象使用。AOP 代理包含了目标对象的全部方法，但 AOP 代理中的方法与目标对象的方法存在差异，AOP 方法在特定切入点添加了增强处理，并回调了目标对象的方法。    
-Spring AOP使用动态代理技术在运行期织入增强代码。使用两种代理机制：基于JDK的动态代理（JDK本身只提供接口的代理）；基于CGlib的动态代理。  
+首先来讲一下静态代理和动态代理的区别：  
+静态代理：由程序员创建或者特定的工具生成源代码，再对其进行编译。在程序运行之前，代理类的.class文件就已经存在。  
+动态代理：程序运行期间，运用反射机制创建而成。动态代理类的字节码在程序运行时由Java反射机制动态生成，无需程序员手工编写它的源代码。动态代理类不仅简化了编程工作，而且提高了软件系统的可扩展性，因为Java 反射机制可以生成任意类型的动态代理类。java.lang.reflect 包中的Proxy类和InvocationHandler 接口提供了生成动态代理类的能力。  
 
-1)JDK的动态代理主要涉及java.lang.reflect包中的两个类：Proxy和InvocationHandler。其中InvocationHandler只是一个接口，可以通过实现该接口定义横切逻辑，并通过反射机制调用目标类的代码，动态的将横切逻辑与业务逻辑织在一起。而Proxy利用InvocationHandler动态创建一个符合某一接口的实例，生成目标类的代理对象。
-其代理对象**必须是某个接口的实现**,它是通过在运行期间创建一个接口的实现类来完成对目标对象的代理.只能实现接口的类生成代理,而**不能针对类**  
+AOP底层使用动态代理来实现。包括两种方式，（1）使用JDK动态代理来实现。 （2）使用cglib来实现。
 
-2)CGLib采用底层的字节码技术，为一个类创建子类，并在子类中采用方法拦截的技术拦截所有父类的调用方法，并顺势织入横切逻辑.它运行期间生成的代理对象是目标类的扩展子类.所以无法通知final的方法,因为它们不能被覆写.是针对类实现代理,主要是为指定的类生成一个子类,覆盖其中方法.  
+**JDK动态代理的实现**：动态代理类使用到了一个接口InvocationHandler和一个代理类Proxy ，这两个类配合使用实现了动态代理的功能。   
+动态代理类使用到了一个接口InvocationHandler和一个代理类Proxy ，这两个类配合使用实现了动态代理的功能。  InvocationHandler 实现它的invoke方法，然后再用Proxy的工厂方法newProxyInstance（）创建一个代理对象，这个对象同样可以实现对具体类的代理功能。而且想代理哪个具体类，只要给Handler（以下代码中的Invoker）的构造器传入这个具体对象的实例就可以了。  
+接口InvocationHandler的方法：
 
-在spring中默认情况下使用JDK动态代理实现AOP,如果proxy-target-class设置为true或者使用了优化策略那么会使用CGLIB来创建动态代理.Spring　AOP在这两种方式的实现上基本一样．以JDK代理为例，会使用JdkDynamicAopProxy来创建代理，在invoke()方法首先需要织入到当前类的增强器封装到拦截器链中，然后递归的调用这些拦截器完成功能的织入．最终返回代理对象．  
+	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable;
+类Proxy的方法：
+	
+	Proxy.newProxyInstance(  //获得具体的代理类
+               ClassLoader loader,
+               Class<?>[] interfaces,
+               InvocationHandler h
+	);	
+example：
+
+	//Invoker实现 InvocationHandler接口
+	public class Invoker implements InvocationHandler {  //需要被代理的类以构造参数的方式传入
+    	AbstractClass ac;
+
+    	public Invoker(AbstractClass ac){
+        	this.ac = ac;
+    	}
+
+	    @Override
+	    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+	        //调用之前可以做一些处理
+	        method.invoke(ac, args);
+	        //调用之后也可以做一些处理
+	        return null;
+	    }
+	}
+	
+	//创建具体类的处理对象
+    Invoker invoker1=new Invoker(new ClassA());
+    //获得具体类的代理
+    AbstractClass ac1 = (AbstractClass) Proxy.newProxyInstance(
+            AbstractClass.class.getClassLoader(),
+            new Class[] { AbstractClass.class }, invoker1
+             );
+    //调用ClassA的show方法。
+    ac1.show();
+JDK动态代理的缺点：只能对实现了接口的类进行，没有实现接口的类不能进行动态代理。  
+
+**cglib动态代理的实现**：cglib采用了非常底层的字节码技术，其原理是通过字节码技术为一个类创建子类，并在子类中采用方法拦截的技术拦截所有父类的调用，顺势织入横切逻辑。  
+被代理的类：
+	
+	public class SayHello {  
+		 public void say(){  
+		  	System.out.println("hello everyone");  
+		 }  
+	}  
+代理类：
+	
+	public class CglibProxy implements MethodInterceptor{  
+	 	private Enhancer enhancer = new Enhancer();  
+		 public Object getProxy(Class clazz){  
+		  	//设置需要创建子类的类  
+		  	enhancer.setSuperclass(clazz);  
+		  	enhancer.setCallback(this);  
+		  	//通过字节码技术动态创建子类实例  
+		  	return enhancer.create();  
+		 }  
+		 //实现MethodInterceptor接口方法  
+		 public Object intercept(Object obj, Method method, Object[] args,  
+		   MethodProxy proxy) throws Throwable {  
+		  	System.out.println("前置代理");  
+		  	//通过代理类调用父类中的方法  
+		  	Object result = proxy.invokeSuper(obj, args);  
+		  	System.out.println("后置代理");  
+		  	return result;  
+		 }  
+	}  
+主函数：
+	
+		public class DoCGLib {  
+	 		public static void main(String[] args) {  
+	  			CglibProxy proxy = new CglibProxy();  
+	  			//通过生成子类的方式创建代理类  
+	  			SayHello proxyImp = (SayHello)proxy.getProxy(SayHello.class);  
+	  			proxyImp.say();  
+	 		}  
+		}  
+输出结果：
+	
+	前置代理  
+	hello everyone  
+	后置代理  
+cglib动态代理对象的性能比jdk动态代理的性能要好，但是创建过程所话费的时间更久，对于无需频繁创建的单例对象用cglib更合适。cglib的缺点是：由于其采用的是动态创建子类的方式，对于final方法，无法进行代理。
 
 ## Spring 框架中都用到了哪些设计模式
 **代理模式**—在AOP和remoting中被用的比较多。  
