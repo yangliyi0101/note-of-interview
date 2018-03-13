@@ -1,5 +1,6 @@
 ## 1.Java 语言的优点
-面向对象,平台无关,内存管理,安全性,多线程,Java 是解释型的（java代码编译后不能直接运行，它是解释运行在JVM上的）。
+面向对象,平台无关,内存管理,安全性,多线程,Java 是解释型的（java代码编译后不能直接运行，它是解释运行在JVM上的）。  
+Java是静态语言，什么是静态语言？就是运行时结构不可变的语言（还有C、C++），同时它是静态类型语言，什么是静态类型语言？数据类型在编译期间确定，在编写代码的时候就要确定变量的数据类型。 Java还是强类型语言，什么是强类型语言？一旦一个变量被指定了某个数据类型，如果不经过强制类型转换，那么它永远就是这个数据类型。
 
 ### 2.Java 和 C++的区别
 1. **多重继承**(java接口多重,类不支持,C++支持)   
@@ -94,7 +95,8 @@ Expression2 可以是得出一个值的任意表达式；这个值用于生成�
 1. String是字符串常量，是不可变类。如果要操作少量的数据用  
 2. StringBuffer是字符串变量，是线程安全的。多线程操作字符串缓冲区 下操作大量数据  
 3. StringBuilder是字符串变量，非线程安全。单线程操作字符串缓冲区 下操作大量数据  
-速度：StringBuilder >  StringBuffer  >  String  
+速度：StringBuilder >  StringBuffer  >  String   
+字符串的拼接应该是被编译器解释成了 StringBuilder  
 String 对象的字符串拼接其实是被 JVM 解释成了 StringBuffer 对象的拼接，所以这些时候 String 对象的速度并不会比 StringBuffer 对象慢，而特别是以下的字符串对象生成中，String 效率是远要比 StringBuffer 快的：  
 String S1 = “This is only a” + “ simple” + “ test”;  
 StringBuffer Sb = new StringBuilder(“This is only a”).append(“simple”).append(“ test”);  
@@ -103,8 +105,8 @@ StringBuffer Sb = new StringBuilder(“This is only a”).append(“simple”).a
 
 ## 为什么String要设计成不可变的
 在Java中将String设计成不可变的是综合考虑到各种因素的结果,如内存,同步,数据结构以及安全等方面的考虑.  
-1. 字符串常量池的需要.  
- 字符串池的实现可以在运行时节约很多heap空间，因为不同的字符串变量都指向池中的同一个字符串。但如果字符串是可变的，那么String interning将不能实现(译者注：String interning是指对不同的字符串仅仅只保存一个，即不会保存多个相同的字符串。)，因为这样的话，如果变量改变了它的值，那么其它指向这个值的变量的值也会一起改变。
+1. 字符串常量池的需要.   
+ 字符串池的实现可以在运行时节约很多heap空间，因为不同的字符串变量都指向池中的同一个字符串。但如果字符串是可变的，那么String interning将不能实现(译者注：String interning是指对不同的字符串仅仅只保存一个，即不会保存多个相同的字符串)，因为这样的话，如果变量改变了它的值，那么其它指向这个值的变量的值也会一起改变。
 2. 线程安全考虑。  
 同一个字符串实例可以被多个线程共享。这样便不用因为线程安全问题而使用同步。字符串自己便是线程安全的。    
 3. 类加载器要用到字符串，不可变性提供了安全性，以便正确的类被加载。譬如你想加载java.sql.Connection类，而这个值被改成了myhacked.Connection，那么会对你的数据库造成不可知的破坏。  

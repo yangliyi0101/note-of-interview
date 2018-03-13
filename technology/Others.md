@@ -26,3 +26,29 @@ IaaS：基础设施服务，Infrastructure-as-a-service 他人提供厨房、炉
 PaaS：平台服务，Platform-as-a-service 除了基础设施，他人还提供披萨饼皮。
 
 SaaS：软件服务，Software-as-a-service 他人直接做好了披萨，不用你的介入，到手的就是一个成品。你要做的就是把它卖出去，最多再包装一下，印上你自己的 Logo。
+
+## Maven依赖的jar包版本冲突解决
+Maven是目前管理jar包最流行的工具。然而过多的jar包依赖可能会导致版本冲突的问题。
+	
+	项目依赖A和B；A依赖C1.0，B依赖C2.0，如果C的两个版本不兼容，我们的项目就会出现问题。
+像例子中这样的C在还是很多的，最常见的就属apache的一堆工具包，比如commons-logging;   
+**冲突解决方法：**  
+1、分析冲突的jar包的依赖路径：  
+
+	mvn dependency:tree -Dverbose -Dincludes=commons-logging:commons-loggging
+这条命令可以打印出所有依赖了groupId和artifactId都为commons-logging的jar包的依赖路径。（groupId和artifactId合在一起统称为坐标）  
+2、选择一个所需的版本。在两个冲突的版本中，我们在自己的项目中用到了哪个版本的语法，就选择哪个。   
+3 在本项目的pom中将冲突的依赖排除：
+
+	<dependency>
+		<groupId>com.xxx.xx</groupId>
+		<artifactId>xxx</artifactId>
+		<version>x</version>
+		<exclusions>
+			<exclusion>
+			<artifactId>com.springsource.slf4j.org.apache.commons.logging</artifactId>
+			<groupId>org.slf4j</groupId>
+			</exclusion>
+		</exclusions>
+	</dependency>
+小tips：最后推荐一下intellij，在intellij中打开你的pom.xml,右键单击内容，选择diagram->show dependencies, 会自动执行mvn:dependency 并绘制一个依赖树，列出所有的依赖包如下图所示。想要排除哪个，可以直接右键选择"exclude".不过目前我还没发现怎样像命令行一样过滤树的结果，所有如果依赖太多，还是先执行一下命令找出哪里的依赖冲突了比较好。

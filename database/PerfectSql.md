@@ -7,6 +7,26 @@ where：是在生成完了临时表后，再对临时表进行过滤，没有左
 
 如果是inner join，放 on 和放 where 产生的效果一样，没有说那种效率更高，推荐使用on，因为where使用的连接语句在数据库中称为隐形连接，慢慢地被淘汰了，而inner join...on子句产生的连接称为显性连接。 如果是 outer join就有区别了，on生效在前，where生效在后。
 
+## 数据库优化
+1） 选取最适用的字段： MySQL可以很好的支持大数据量的存取，但是一般说来，数据库中的表越小，在它上面执行的查询也就会越快。因此，在创建表的时候，为了获得更好的性能，我们可以将表中字段的宽度设得尽可能小。另外一个提高效率的方法是在可能的情况下，应该尽量把字段设置为NOT NULL，这样在将来执行查询的时候，数据库不用去比较NULL值。  
+
+2）使用连接（JOIN）来代替子查询(Sub-Queries)。连接（JOIN）..之所以更有效率一些，是因为MySQL不需要在内存中创建临时表来完成这个逻辑上的需要两个步骤的查询工作。
+
+3）使用联合(UNION)来代替手动创建的临时表。
+
+4）事务。它的作用是：要么语句块中每条语句都操作成功，要么都失败。换句话说，就是可以保持数据库中数据的一致性和完整性。
+
+5）锁定表。由于事务的独占性，有时候会影响数据库的性能。这时可以用锁定表来获取更好的性能。
+
+	LOCK TABLE inventory WRITE SELECT quantity  FROM   inventory   WHERE Item='book';
+	...
+	UPDATE   inventory   SET   Quantity=11   WHERE  Item='book';UNLOCKTABLES
+这里，我们用一个select语句取出初始数据，通过一些计算，用update语句将新值更新到表中。包含有WRITE关键字的LOCKTABLE语句可以保证在UNLOCKTABLES命令被执行之前，不会有其它的访问来对inventory进行插入、更新或者删除的操作。
+
+6）使用外键。
+
+7）使用索引。索引应建立在那些将用于JOIN,WHERE判断和ORDERBY排序的字段上。尽量不要对数据库中某个含有大量重复的值的字段建立索引。
+
 ## 参考 SQL执行顺序
 (5)SELECT DISTINCT TOP(<top_specification>) <select_list>
 (1)FROM <left_table> <join_type> JOIN <right_table> ON <on_predicate>
