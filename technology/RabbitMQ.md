@@ -46,4 +46,18 @@ topic 交换器通过模式匹配分配消息的路由键属性，将路由键�
 
 总之：ZeroMQ小而美，RabbitMQ大而稳，Kakfa和RocketMQ快而强劲。RocketMQ虽然目前还很多不完善，但是一旦在Apache孵化成为顶级项目，全球程序猿开始贡献，前途也是不可限量的。
 
+## JMS的两种模式
+Java消息服务（Java Message Service，JMS）应用程序接口是一个Java平台中关于面向消息中间件的API。JMS规范目前支持两种消息模型：点对点（point to point， queue）和发布/订阅（publish/subscribe，topic）。   
+点对点：Queue，不可重复消费。对一个消息而言，只会有一个消费者可以消费。  
+发布/订阅：Topic，可以重复消费。发布到topic的消息会被所有订阅者消费。  
+传统企业型消息队列ActiveMQ遵循了JMS规范，实现了点对点和发布订阅模型，但其他流行的消息队列RabbitMQ、Kafka并没有遵循JMS规范。   
+RabbitMQ实现了AQMP协议（高级消息队列协议），AQMP协议定义了消息路由规则和方式（祥见上面）。   
+
+JMS为不同类型的内容提供了他们各自的消息类型，所有消息派生自Message接口：  
+StreamMessage   一种主体中包含Java基元值流的消息。其填充和读取均按顺序进行。  
+MapMessage       一种主体中包含一组键--值对的消息。没有定义条目顺序。  
+TextMessage       一种主体中包含Java字符串的消息（例如，XML消息）。  
+ObjectMessage    一种主体中包含序列化Java对象的消息。  
+BytesMessage     一种主体中包含连续字节流的消息。  
+
 

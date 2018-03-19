@@ -1,4 +1,4 @@
-## sql语句 outter join中的on和where的区别
+## sql语句 outer join中的on和where的区别
 tips：数据库在通过连接两张或多张表来返回记录时，都会生成一张中间的临时表，然后再将这张临时表返回给用户。
 
 on：是用来生成临时表时过滤的条件。由于left join表示把左表的数据全部显示，所以 on 只是用来限制右表，无论on后面跟多少个and、or、not，都无法对左表起作用。
