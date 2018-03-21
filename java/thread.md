@@ -60,7 +60,7 @@ Java为了最小化减少内存泄露的可能性和影响，在ThreadLocal进�
 Wait-notify机制是在获取对象锁的前提下不同线程间的通信机制。在Java中，任意对象都可以当作锁来使用，由于锁对象的任意性，所以这些通信方法需要被定义在Object类里。
 
 ## 为什么wait(), notify()和notifyAll()必须在同步方法或者同步块中被调用？
-wait/notify机制是依赖于Java中Synchronized同步机制的，其目的在于确保等待线程从Wait()返回时能够感知通知线程对共享变量所作出的修改。如果不在同步范围内使用，就会抛出java.lang.IllegalMonitorStateException的异常。wait()表示让当前线程释放对象锁并进入阻塞状态，所以要先确保在同步范围内才能获得对象锁。notify()表示唤醒一个等待相应对象锁的线程，并在当前线程释放后释放对象锁。
+wait/notify机制是依赖于Java中Synchronized同步机制的，其目的在于确保等待线程从Wait()返回时能够感知通知线程对共享变量所作出的修改。如果不在同步范围内使用，就会抛出java.lang.IllegalMonitorStateException的异常。wait()表示让当前线程释放对象锁并进入阻塞状态，所以要先确保在同步范围内才能获得对象锁。notify()表示唤醒一个等待相应对象锁的线程，并在当前线程执行完后释放对象锁。
 
 ## Java原子性操作实现原理
 使用循环CAS实现原子性操作，CAS是在操作期间先比较旧值，如果旧值没有发生改变，才交换成新值，发生了变化则不交换。这种方式会产生以下几种问题：1.ABA问题，通过加版本号解决；2.循环时间过长开销大，一般采用自旋方式实现；3. 只能保证一个共享变量的原子操作。   
@@ -135,7 +135,14 @@ ThreadPoolExecutor.CallerRunsPolicy：**调用者运行策略**：由调用线�
 如果线程池中的线程数量大于 corePoolSize时，如果某线程空闲时间超过keepAliveTime，线程将被终止，直至线程池中的线程数目不大于corePoolSize；如果允许为核心池中的线程设置存活时间，那么核心池中的线程空闲时间超过keepAliveTime，线程也会被终止。  
 **设置线程池的大小**：  
 如果是CPU密集型任务，就需要尽量压榨CPU，参考值可以设为 NCPU+1；  
-如果是IO密集型任务，参考值可以设置为2*NCPU
+如果是IO密集型任务，参考值可以设置为2*NCPU   
+
+**线程池的种类**：
+Java通过Executors提供四种线程池，分别为：  
+newCachedThreadPool创建一个可缓存线程池，如果线程池长度超过处理需要，可灵活回收空闲线程，若无可回收，则新建线程。  
+newFixedThreadPool 创建一个定长线程池，可控制线程最大并发数，超出的线程会在队列中等待。  
+newScheduledThreadPool 创建一个定长线程池，支持定时及周期性任务执行。  
+newSingleThreadExecutor 创建一个单线程化的线程池，它只会用唯一的工作线程来执行任务，保证所有任务按照指定顺序(FIFO, LIFO, 优先级)执行。   
 
 ## execute 和submit的区别
 Execute()用于提交不需要返回值得任务，submit()用于提交需要返回值的任务，返回Future类型的对象。

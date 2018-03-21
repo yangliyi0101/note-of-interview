@@ -60,4 +60,22 @@ TextMessage       一种主体中包含Java字符串的消息（例如，XML消�
 ObjectMessage    一种主体中包含序列化Java对象的消息。  
 BytesMessage     一种主体中包含连续字节流的消息。  
 
+## 可靠投递、重复消费、顺序消费
+AMQP协议，利用事务的机制，可以保证消息不会丢失：令channel处于transactional模式。 在一个channel中，要不处于事务的模式下，要不处于应答机制下。
 
+	channel.txSelect(); // 开启通道事务模式，与channel.confirmSelect()模式互斥
+	channel.txCommit(); // 提交事务
+	channel.txRollback(); // 回滚事务
+在这种方式下，事务机制会带来大量的多余开销，并会导致吞吐量下降250% 。为了补救事务带来的问题，引入了Publisher Confirm机制。  
+Consumer Acknowledgements机制：当consumer消费端成功消费完消息后，返回给broker确认通知，告诉broker移除队列中已经消费成功的消息，如果消费端消费失败，可以通知broker将消费失败的消息重新放回队列中，以便继续消费。   
+Publisher Acknowledgements机制：消息生产者发送消息给broker，当broker收到消息，将消息持久化到磁盘并同步至所有的镜像节点之后，才会返回给客户端消息投递成功确认。从而保证消息在投递过程中不会因为网络拥塞，服务宕机，机房断电等突发情况导致消息投递失败而丢失。当由于broker内部消息处理发生异常时，将返回给客户端basic.nack通知；当消息投递成功时，broker则返回给客户端basic.ack通知。
+
+重复消息不可能百分之100避免，除非可以允许消息丢失。  
+
+顺序消费能否百分之100满足？答案是可以，但是条件更加苛刻，1.允许消息丢失 2.从发送方到服务方到接受者都是单点单线程。  
+
+一般来讲，一个主流消息队列的设计范式里，应该是不丢消息的前提下，尽量减少重复消息，不保证消息的投递顺序。
+
+如果因种种原因消息重复或者错乱的消息还是来了，该怎么处理，幂等的处理消息是一门技术，还有版本号，和状态机两种方式。
+
+https://tech.meituan.com/mq-design.html

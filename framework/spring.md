@@ -96,7 +96,7 @@ Spring从两个角度来实现自动化装配：
 AOP底层使用动态代理来实现。包括两种方式，（1）使用JDK动态代理来实现。 （2）使用cglib来实现。
 
 **JDK动态代理的实现**：动态代理类使用到了一个接口InvocationHandler和一个代理类Proxy ，这两个类配合使用实现了动态代理的功能。   
-动态代理类使用到了一个接口InvocationHandler和一个代理类Proxy ，这两个类配合使用实现了动态代理的功能。  InvocationHandler 实现它的invoke方法，然后再用Proxy的工厂方法newProxyInstance（）创建一个代理对象，这个对象同样可以实现对具体类的代理功能。而且想代理哪个具体类，只要给Handler（以下代码中的Invoker）的构造器传入这个具体对象的实例就可以了。  
+InvocationHandler 实现它的invoke方法，然后再用Proxy的工厂方法newProxyInstance（）创建一个代理对象，这个对象同样可以实现对具体类的代理功能。而且想代理哪个具体类，只要给Handler（以下代码中的Invoker）的构造器传入这个具体对象的实例就可以了。  
 接口InvocationHandler的方法：
 
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable;
@@ -148,7 +148,7 @@ JDK动态代理的缺点：只能对实现了接口的类进行，没有实现�
 代理类：
 	
 	public class CglibProxy implements MethodInterceptor{  
-	 	private Enhancer enhancer = new Enhancer();  
+	 	 private Enhancer enhancer = new Enhancer();  
 		 public Object getProxy(Class clazz){  
 		  	//设置需要创建子类的类  
 		  	enhancer.setSuperclass(clazz);  
