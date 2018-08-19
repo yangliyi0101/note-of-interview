@@ -41,7 +41,7 @@
   * [8.1 编码历史](./others/section1.md)
   * [8.2 单例模式的几种实现方式](./others/danli.md)
   * [8.3 一致性哈希算法](./others/hash.md)
-  * [8.4 简历上知识点](./others/review.md)
+  * [8.4 简历上知识点](./Others/review.md)
 * [第九章 面试经历](./hr/README.md)
   * [9.1 项目与个人自我介绍](./hr/ask.md)
   * [9.2 2018年春面试经历](./hr/interview.md)
