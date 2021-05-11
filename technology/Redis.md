@@ -1,4 +1,6 @@
-https://mp.weixin.qq.com/s/4LdLgDmSH84WE_cxN6SmAw
+《我想进大厂》之Redis夺命连环11问   https://mp.weixin.qq.com/s/4LdLgDmSH84WE_cxN6SmAw
+
+缓存一致性问题怎么解决？  https://mp.weixin.qq.com/s?__biz=MzkzNTEwOTAxMA==&mid=2247488185&idx=1&sn=f07ee035bc8c276e4d72b4ffb9627e1e&chksm=c2b25a44f5c5d3523985e4161e42ae0d1b4c8273915760d3ec53afbbd5fe0066178d5ade1673&scene=178&cur_album_id=1512519209967271939#rd
 
 ## Redis
 Redis采用的是基于内存的采用的是单进程单线程模型的KV数据库，由C语言编写。官方提供的数据是可以达到100000+的qps（每秒请求数）。这个数据不比采用单进程多线程的同样基于内存的KV数据库Memcached差。
