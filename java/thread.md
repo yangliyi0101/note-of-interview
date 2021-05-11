@@ -165,6 +165,10 @@ CountDownLatch 是计数器, 线程完成一个就记一个,就像报数一样, 
  
 **Semaphore**翻译成字面意思为 信号量，Semaphore可以控同时访问的线程个数，通过 acquire() 获取一个许可，如果没有就等待，而 release() 释放一个许可。
 
+《面试官：说说CountDownLatch，CyclicBarrier，Semaphore的原理？》：
+https://mp.weixin.qq.com/s?__biz=MzkzNTEwOTAxMA==&mid=2247485078&idx=1&sn=8357c498fab66b8c6be4f030ed41226a&chksm=c2b24e6bf5c5c77d24341053d8b0f8d5ed40b7432498ac8891eff6f406955f7b92bfbd633c1a&scene=178&cur_album_id=1512519209967271939#rd
+
+
 ## Timer和TimerTask
 其实就Timer来讲就是一个调度器,而TimerTask呢只是一个实现了run方法的一个类,而具体的TimerTask需要由你自己来实现,例如这样:  
 
