@@ -1,3 +1,5 @@
+https://mp.weixin.qq.com/s/4LdLgDmSH84WE_cxN6SmAw
+
 ## Redis
 Redis采用的是基于内存的采用的是单进程单线程模型的KV数据库，由C语言编写。官方提供的数据是可以达到100000+的qps（每秒请求数）。这个数据不比采用单进程多线程的同样基于内存的KV数据库Memcached差。
 
